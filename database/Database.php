@@ -55,6 +55,10 @@ class Database extends \PDO{
     
     return $connection::lastInsertId();
   }
+  
+  public function execute($query,$params = array()){
+    return self::executeQuery($query);
+  }
 
   
   public static function getLogin($type = 'r'){
