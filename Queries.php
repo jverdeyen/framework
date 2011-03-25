@@ -1,6 +1,8 @@
 <?php
 namespace Lib;
 
+use Lib\Database\Database;
+
 class Queries{
 
   private function __construct(){}
@@ -82,13 +84,13 @@ class Queries{
   }
   
   public function escape($value){
-    $link = Database::getInstance()->getConnection();
+    $database = Database::getInstance();
     if(is_array($value)){
       foreach($value as $key => $item)
-        $value[$key] = mysql_real_escape_string($item, $link);
+        $value[$key] = (!is_numeric($item)) ? $database->quote($item) : $item;
       return $value;
     }else{
-      return mysql_real_escape_string($value,$link);
+      return (!is_numeric($value)) ? $database->quote($value) : $value;
     }
   }
 
