@@ -1,5 +1,5 @@
 <?php
-namespace Lib\Database;
+namespace Framework\Database;
 
 class Database extends \PDO{
   

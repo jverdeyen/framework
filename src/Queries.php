@@ -1,7 +1,7 @@
 <?php
-namespace Lib;
+namespace Framework;
 
-use Lib\Database\Database;
+use Framework\Database\Database;
 
 class Queries{
 

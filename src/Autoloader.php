@@ -1,10 +1,11 @@
 <?php 
-namespace Lib;
+namespace Framework;
 
 class Autoloader {
   
   private static $_instance = null;
   private $base_dir;
+  private $namespaces;
   
   private function __construct() {}
   
@@ -16,9 +17,11 @@ class Autoloader {
     return self::$_instance;
   }
   
-  public function register($base_dir) {
-    $this->base_dir = $base_dir;
-
+  public function registerNamespace($namespace,$dir){
+    $this->namespaces[strtoupper($namespace)] = $dir;
+  }
+  
+  public function register() {
     ini_set('unserialize_callback_func', 'spl_autoload_call');
     spl_autoload_register(array($this, 'autoload'));
     
@@ -30,14 +33,16 @@ class Autoloader {
   }
   
   private function autoload($class) {
+    // Enkel registerd namespaces laden
+    $class = explode('\\',$class);
+    $first_namespace = strtoupper($class[0]);
     
-    // Enkel Applicatie classes laden, en Lib data
-    if((strpos($class,APP_NAME) === false) && (strpos($class,'Framework') === false)) 
+    if(!array_key_exists($first_namespace, $this->namespaces))
       return false;
-      
-    $class = explode('\\',str_replace(APP_NAME.'\\','',$class)); // Strip Application name
-    $filename = end($class).'.php';
+    
+    unset($class[0]);
+    $filename = end($class).'.php';  
     array_pop($class);
-    include $this->base_dir.implode('/',array_map('strtolower', $class)).'/'.$filename;
+    include $this->namespaces[strtoupper($first_namespace)].implode('/',array_map('strtolower', $class)).'/'.$filename;
   }
 }

@@ -1,10 +1,10 @@
 <?php
-namespace Lib\Tests;
-use Lib;
+namespace Framework\Tests;
+use Framework;
 
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 
-require_once dirname(__FILE__) .'/../Autoloader.php';
+require_once dirname(__FILE__) .'/../src/Autoloader.php';
 
 define(ROOT_DIR,dirname(__FILE__) .'/../../');
 define(APP_NAME,'Dummy');
@@ -36,5 +36,6 @@ define(COOKIE_NAME_LANGUAGE,'dummy-language');
 define(LANGUAGES,serialize(array( 1 => 'nl', 2 => 'fr', 3 => 'de', 4 => 'en')));
 define(MULTI_LANGUAGE, true);
 
-Lib\Autoloader::getInstance()->register(dirname(__FILE__) . '/../');
+Framework\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__) . '/../src/');
+Framework\Autoloader::getInstance()->register();
 ?>

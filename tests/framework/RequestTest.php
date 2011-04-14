@@ -1,7 +1,7 @@
 <?php
-namespace Lib\Tests\Framework;
-use Lib;
-use Lib\Request;
+namespace Framework\Tests\Framework;
+use Framework;
+use Framework\Request;
 
 class RequestTest extends \PHPUnit_Framework_TestCase {
       
