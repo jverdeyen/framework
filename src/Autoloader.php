@@ -22,6 +22,7 @@ class Autoloader {
   }
   
   public function register() {
+    //var_dump($this->namespaces);
     ini_set('unserialize_callback_func', 'spl_autoload_call');
     spl_autoload_register(array($this, 'autoload'));
     
@@ -34,13 +35,17 @@ class Autoloader {
   
   private function autoload($class) {
     // Enkel registerd namespaces laden
-    $class = explode('\\',$class);
-    $first_namespace = strtoupper($class[0]);
+    $temp = $class;
+    $class = explode('\\',$class);    
+    $first_namespace = ($class[0] == '') ? strtoupper($class[1]) : strtoupper($class[0]);
     
     if(!array_key_exists($first_namespace, $this->namespaces))
       return false;
     
+    if($class[0] == '')
+      unset($class[1]);
     unset($class[0]);
+      
     $filename = end($class).'.php';  
     array_pop($class);
     include $this->namespaces[strtoupper($first_namespace)].implode('/',array_map('strtolower', $class)).'/'.$filename;
