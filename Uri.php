@@ -31,30 +31,7 @@ class Uri{
 	    return array_slice(self::$params, 3, $total-2);
 	}
 	
-	public static function getUrl($params){
-	  $request = Request::getInstance();
-	  $language = $request->getLanguage();
-	  
-    $url = array();
-    $url[0] = isset( $language ) ? $language : DEFAULT_LANGUAGE; // language
-	  $url[1] = 'index'; // controller
-	  $url[2] = 'index'; // action
-	  
-	  
-	  if($params['controller'] != '')
-	    $url[1] = $params['controller'];
-	  if($params['action'] != '')
-	    $url[2] = $params['action'];
-	  if($params['language'] != '')
-	    $url[0] = $params['language'];
-	  
-	  if($url[2] == DEFAULT_ACTION && !is_array($params['extra'])){
-      unset($url[2]);
-      if($url[1] == DEFAULT_CONTROLLER){
-        unset($url[1]);
-      }  
-    }
-	  
+	private static function constructUrl($params,$url){
 	  if(is_array($params['extra'])){
 	    $i = 3;
 	    foreach($params['extra'] as $key => $value){
@@ -83,6 +60,64 @@ class Uri{
       $url .= '/';
       
     return $url;
+	}
+	
+	private static function getUrlSingleLanguage($params){
+	  $request = Request::getInstance();
+	  
+    $url = array();
+	  $url[0] = 'index'; // controller
+	  $url[1] = 'index'; // action
+	  
+	  
+	  if($params['controller'] != '')
+	    $url[0] = $params['controller'];
+	  if($params['action'] != '')
+	    $url[1] = $params['action'];
+	  
+	  if($url[1] == DEFAULT_ACTION && !is_array($params['extra'])){
+      unset($url[1]);
+      if($url[0] == DEFAULT_CONTROLLER){
+        unset($url[0]);
+      }  
+    }
+	  
+	  return self::constructUrl($params,$url);
+	}
+	
+	private static function getUrlMultiLanguage($params){
+	  $request = Request::getInstance();
+	  $language = $request->getLanguage();
+	  
+    $url = array();
+    $url[0] = isset( $language ) ? $language : DEFAULT_LANGUAGE; // language
+	  $url[1] = 'index'; // controller
+	  $url[2] = 'index'; // action
+	  
+	  
+	  if($params['controller'] != '')
+	    $url[1] = $params['controller'];
+	  if($params['action'] != '')
+	    $url[2] = $params['action'];
+	  if($params['language'] != '')
+	    $url[0] = $params['language'];
+	  
+	  if($url[2] == DEFAULT_ACTION && !is_array($params['extra'])){
+      unset($url[2]);
+      if($url[1] == DEFAULT_CONTROLLER){
+        unset($url[1]);
+      }  
+    }
+	  
+	  return self::constructUrl($params,$url);
+	}
+	
+	public static function getUrl($params){
+	  if(MULTI_LANGUAGE === false){
+	    return self::getUrlSingleLanguage($params);
+	  }
+	  
+	  return self::getUrlMultiLanguage($params);
 	}
 	
 	public static function redirect($params,$http_response_code = '302'){

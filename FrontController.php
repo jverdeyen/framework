@@ -22,42 +22,21 @@ class FrontController{
 	  
 	  $this->_request = Request::getInstance();
     $this->_app = $this->_request->getApp();
+    $this->_controller  = $this->_request->getController();
+    $this->_action  = $this->_request->getAction();
+    $this->_language  = $this->_request->getLanguage();
 
-	  if(!$this->_controller = Uri::getInstance()->getParam(1))
-	    $this->_controller = DEFAULT_CONTROLLER;
-	  
-	  if(!$this->_action = Uri::getInstance()->getParam(2))
-	    $this->_action = DEFAULT_ACTION;
-	  
-	  $this->setLanguage();
-	  
 	  setlocale(LC_ALL, $this->_language."_".strtoupper($this->_language).'.utf8');
     
-
-	  if($this->_app == FRONTEND_APP_NAME)
-	    self::redirectUrl();
-
-	}
-	
-	public function setLanguage(){
-	  $browser_lang = Localization::getBrowserLanguage();
-
-	  if(Uri::getInstance()->getParam(0)){
-	     // check in de url
-	    $this->_language = Uri::getInstance()->getParam(0);
-	  }elseif($this->_request->getCookie(COOKIE_NAME_LANGUAGE)){ 
-	    // check de cookie
-	    $this->_language = $this->_request->getCookie(COOKIE_NAME_LANGUAGE);
-	  }elseif($browser_lang){
-	    // check de browser language
-	    $this->_language = $browser_lang;
-	  }else{
-	    $this->_language = DEFAULT_LANGUAGE;
-	    // toon default
-	  }
+    if( MULTI_LANGUAGE !== false ){
+      if($this->_app == FRONTEND_APP_NAME)
+  	    self::redirectUrlMultiLang();
+    }else{
+      if($this->_app == FRONTEND_APP_NAME)
+  	    self::redirectUrlSingleLang();
+    }
 	  
-	  if(in_array($this->_language,unserialize(LANGUAGES)))
-      $this->_request->setCookie(COOKIE_NAME_LANGUAGE,$this->_language);
+    
 	}
 	
 	public function route(){
@@ -70,12 +49,31 @@ class FrontController{
 	  throw new \Exception("Controller $controller_name could not be found.");
 	}
 	
-	private function redirectUrl(){
+	private function redirectUrlSingleLang(){
+	  $uri =  Uri::getInstance();
+    
+    // zijn er meer dan 2 parameters (extra), doe dan zeker geen redirect (toch niet mogelijk)
+    if($uri->getParam(2)) return false;
+
+    $param = array();
+    $param[0] = $this->_controller;
+    $param[1] = $this->_action;
+    
+    if($this->_action == DEFAULT_ACTION){
+     unset($param[1]);
+      if($this->_controller == DEFAULT_CONTROLLER){
+        unset($param[0]);
+      }  
+    }
+    
+    $this->createUrlAndRedirect($param);    
+	}
+	
+	private function redirectUrlMultiLang(){
     $uri =  Uri::getInstance();
     
     // zijn er meer dan 3 parameters (extra), doe dan zeker geen redirect (toch niet mogelijk)
-    if($uri->getParam(3))
-      return false;
+    if($uri->getParam(3)) return false;
     
     
     $param = array();
@@ -97,6 +95,10 @@ class FrontController{
       $param[0] = DEFAULT_LANGUAGE;
     }
     
+    $this->createUrlAndRedirect($param);
+  }
+  
+  private function createUrlAndRedirect($param){
     $redirect_suggestion = ROOT_URL.implode('/',$param);  
     if(substr($redirect_suggestion,-1) != '/')
       $redirect_suggestion .= '/';
@@ -106,9 +108,7 @@ class FrontController{
     if($current_url !=  $redirect_suggestion){
       header('Location: '.$redirect_suggestion,true,302);
       exit;
-    }   
-    
-
+    }
   }
 	
 }

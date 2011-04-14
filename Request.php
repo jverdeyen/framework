@@ -14,21 +14,60 @@ class Request {
     $uri = Uri::getInstance();
    
     $this->_app = self::getApp();
-   
-    if(!$this->_controller = $uri->getParam(1))
-	    $this->_controller = DEFAULT_CONTROLLER;
-	  
-	  if(!$this->_action = $uri->getParam(2))
-	    $this->_action = DEFAULT_ACTION;
-	    
-	  if(!$this->_language = $uri->getParam(0))
-	    $this->_language = DEFAULT_LANGUAGE;
+    
+    self::initController();
+    self::initAction();
+    self::initLanguage();
   }
  
   public static function getInstance(){
     if(!isset(self::$_instance))
       self::$_instance = new self();
     return self::$_instance;
+  }
+  
+  private function initController(){
+    if(MULTI_LANGUAGE === false){
+	    if(!$this->_controller = Uri::getInstance()->getParam(0))
+  	    $this->_controller = DEFAULT_CONTROLLER;
+	  }else{
+	    if(!$this->_controller = Uri::getInstance()->getParam(1))
+  	    $this->_controller = DEFAULT_CONTROLLER;
+	  }
+  }
+  
+  private function initAction(){
+    if(MULTI_LANGUAGE === false){
+	    if(!$this->_action = Uri::getInstance()->getParam(1))
+  	    $this->_action = DEFAULT_ACTION;
+	  }else{
+	    if(!$this->_action = Uri::getInstance()->getParam(2))
+  	    $this->_action = DEFAULT_ACTION;
+	  }
+  }
+  
+  private function initLanguage(){
+    if(MULTI_LANGUAGE === false)
+	    $this->_language = DEFAULT_LANGUAGE;
+	  
+	  $browser_lang = Localization::getBrowserLanguage();
+
+	  if(Uri::getInstance()->getParam(0)){
+	     // check in de url
+	    $this->_language = Uri::getInstance()->getParam(0);
+	  }elseif(self::getCookie(COOKIE_NAME_LANGUAGE)){ 
+	    // check de cookie
+	    $this->_language = self::getCookie(COOKIE_NAME_LANGUAGE);
+	  }elseif($browser_lang){
+	    // check de browser language
+	    $this->_language = $browser_lang;
+	  }else{
+	    $this->_language = DEFAULT_LANGUAGE;
+	    // toon default
+	  }
+	  
+	  if(in_array($this->_language,unserialize(LANGUAGES)))
+      self::setCookie(COOKIE_NAME_LANGUAGE,$this->_language);
   }
  
   public function getController(){
