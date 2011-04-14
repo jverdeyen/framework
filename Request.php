@@ -47,8 +47,10 @@ class Request {
   }
   
   private function initLanguage(){
-    if(MULTI_LANGUAGE === false)
+    if(MULTI_LANGUAGE === false){
 	    $this->_language = DEFAULT_LANGUAGE;
+      return true;
+    }
 	  
 	  $browser_lang = Localization::getBrowserLanguage();
 

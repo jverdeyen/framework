@@ -25,10 +25,15 @@ class Uri{
 	
 	public function getExtraParams(){
 	  $total = count(self::$params);
-	  if($total <= 3)
-	    return false;
-	  else
+	  if(MULTI_LANGUAGE === false){
+	    if($total <= 2) 
+	      return false;
+	    return array_slice(self::$params, 2, $total-1);
+    }else{
+	    if($total <= 3) 
+	      return false;
 	    return array_slice(self::$params, 3, $total-2);
+    }
 	}
 	
 	private static function constructUrl($params,$url){
