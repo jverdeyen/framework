@@ -15,6 +15,9 @@ class Uri{
 
 	private function __construct(){
 		self::$params =  explode('/', $_SERVER['QUERY_STRING']);
+		if(end(self::$params) == ''){
+		  array_pop(self::$params);
+		}
 	}
 
 	public function getParam($key){

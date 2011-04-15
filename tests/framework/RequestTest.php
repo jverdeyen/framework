@@ -6,7 +6,9 @@ use Framework\Request;
 class RequestTest extends \PHPUnit_Framework_TestCase {
       
   public function testRequestObject(){
-    $Request = Request::getInstance();
+    $_SERVER['SERVER_NAME'] = 'www.framework.be';
+    //$Request = Request::getInstance();
+
   }
     
 }

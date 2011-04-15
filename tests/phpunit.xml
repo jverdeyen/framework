@@ -1,8 +1,9 @@
-<phpunit bootstrap="./bootstrap.php" colors="false">
+<phpunit bootstrap="./bootstrap.php" colors="true" processIsolation="true">
 
   <testsuites>
-    <testsuite name="RequestTest">
-        <file>framework/RequestTest.php</file>
+    <testsuite name="Framework">
+        <file>framework/UriTest.php</file>
+        <file>framework/RequestTest.php</file>      
     </testsuite>
   </testsuites>
 
