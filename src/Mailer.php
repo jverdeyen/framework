@@ -7,7 +7,7 @@ class Mailer {
   private $message;
 
   public function __construct() {
-    require_once(ROOT_DIR.'/framework/src/vendor/SwiftMailer/swift_required.php');
+    require_once(dirname(__FILE__).'/vendor/SwiftMailer/swift_required.php');
     
     $transport = \Swift_MailTransport::newInstance();
     $this->mailer = \Swift_Mailer::newInstance($transport);
