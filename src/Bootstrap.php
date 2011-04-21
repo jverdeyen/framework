@@ -19,14 +19,8 @@ class Bootstrap{
       echo FrontController::getInstance()->route();
       
     }catch(\Exception $e){
-      
-      Logger::getInstance()->exceptionHandler($e);
-
-      //TODO check of er een error controller bestaat, anders standaard error tonen
-      $errorController = new ErrorController();
-      $errorController->exception = $e;
-      $errorController->init();
-
+      $ErrorController = new ErrorController();
+      $ErrorController->init($e);
     }
     
   }

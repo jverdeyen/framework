@@ -74,7 +74,7 @@ class Logger {
     //log the error in the default php error logfile
     error_log('PHP Fatal error:  ' . $message, 0);
     
-    $this->log('PHP Fatal error', $message, $backtrace);
+    return $this->log('PHP Fatal error', $message, $backtrace);
   }
 
   public function shutdownHandler() {
@@ -96,15 +96,13 @@ class Logger {
     $mail_message .= "Cookie-parameters:\n".print_r($_COOKIE, true)."\n";
     $mail_message .= "Session-parameters:\n".print_r($_SESSION, true)."\n";
     $mail_message .= "Server-parameters:\n".print_r($_SERVER, true);
-    
-    //send log message via email
-    if($env == 'prod' || $env = 'test'){
-      mail('joeriverdeyen@gmail.com', APP_NAME." log ($env)", $mail_message);
-    }else{
-      echo nl2br($mail_message);
-    }
-    
 
+    //send log message via email
+    if($env == 'prod' || $env == 'test'){
+      mail('joeriverdeyen@gmail.com', APP_NAME." log ($env)", $mail_message);
+    }
+
+    return nl2br($mail_message);
   }
 
   private function get_debug_print_backtrace($traces_to_ignore=1) {
