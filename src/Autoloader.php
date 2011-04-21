@@ -7,9 +7,17 @@ class Autoloader {
   private $base_dir;
   private $namespaces;
   
-  private function __construct() {}
+  private function __construct() {
+    ini_set('unserialize_callback_func', 'spl_autoload_call');
+    spl_autoload_register(array($this, 'autoload'));
+    
+    require_once(dirname(__FILE__).'/vendor/Twig/Autoloader.php');
+    \Twig_Autoloader::register();
+    
+    require_once(dirname(__FILE__).'/vendor/Twig/Extensions/Autoloader.php');
+    \Twig_Extensions_Autoloader::register();
+  }
   
-
   public static function getInstance() {
     if(!isset(self::$_instance)) {
       self::$_instance = new self();
@@ -19,18 +27,6 @@ class Autoloader {
   
   public function registerNamespace($namespace,$dir){
     $this->namespaces[strtoupper($namespace)] = $dir;
-  }
-  
-  public function register() {
-    //var_dump($this->namespaces);
-    ini_set('unserialize_callback_func', 'spl_autoload_call');
-    spl_autoload_register(array($this, 'autoload'));
-    
-    require_once(dirname(__FILE__).'/vendor/Twig/Autoloader.php');
-    \Twig_Autoloader::register();
-    
-    require_once(dirname(__FILE__).'/vendor/Twig/Extensions/Autoloader.php');
-    \Twig_Extensions_Autoloader::register();
   }
   
   private function autoload($class) {

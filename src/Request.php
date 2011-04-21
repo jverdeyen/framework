@@ -18,6 +18,7 @@ class Request {
     self::initController();
     self::initAction();
     self::initLanguage();
+
   }
  
   public static function getInstance(){
@@ -89,7 +90,7 @@ class Request {
   }
  
   public function getApp(){
-   
+
     if(!isset($this->_app)){
       list($subdomain, $rest) = explode('.', $this->getServer('SERVER_NAME'), 2);
       $apps = unserialize(APPS);
@@ -105,7 +106,7 @@ class Request {
         $this->_app = $apps['default']['name'];
       
       if(trim($this->_app) == ''){
-        throw new Exception('No default Application name defined!');
+        throw new \Exception('No default Application name defined!');
       }
    }
    return $this->_app;
@@ -114,6 +115,10 @@ class Request {
  
    public function getServer($name) {
      return stripslashes($_SERVER[$name]);
+   }
+   
+   public function setServer($name,$value){
+     $_SERVER[$name] = $value;
    }
  
    public function getPost($name = false) {
@@ -129,11 +134,18 @@ class Request {
    public function issetPost($name) {
      return isset($_POST[$name]);
    }
+   
+   public function setPost($name,$value){
+     $_POST[$name] = $value;
+    }
  
    public function unsetPost($name) {
      unset($_POST[$name]);
    }
- 
+  
+   public function setGet($name,$value){
+     $_GET[$name] = $value;
+   }
    public function getGet($name) {
      return stripslashes($_GET[$name]);
    }

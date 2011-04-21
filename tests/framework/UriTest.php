@@ -9,7 +9,8 @@ class UriTest extends \PHPUnit_Framework_TestCase {
       
   public function testUriParamsMultiLangNoExtra(){
     define(MULTI_LANGUAGE, true);
-    $_SERVER['QUERY_STRING'] = 'de/controller/action/';
+    
+    Request::setServer('QUERY_STRING','de/controller/action/');
     
     $Uri = Uri::getInstance();
     $this->assertEquals($Uri->getParam(0),'de');
@@ -20,7 +21,8 @@ class UriTest extends \PHPUnit_Framework_TestCase {
   
   public function testUriParamsMultiLang(){
     define(MULTI_LANGUAGE, true);
-    $_SERVER['QUERY_STRING'] = 'de/controller/action/extra/';
+    
+    Request::setServer('QUERY_STRING','de/controller/action/extra/');
     
     $Uri = Uri::getInstance();
     $this->assertEquals($Uri->getParam(0),'de');
@@ -31,7 +33,8 @@ class UriTest extends \PHPUnit_Framework_TestCase {
   
   public function testUriParamsSingleLangNoExtra(){
     define('MULTI_LANGUAGE', false);
-    $_SERVER['QUERY_STRING'] = 'controller/action/';
+    
+    Request::setServer('QUERY_STRING','controller/action/');
     
     $Uri = Uri::getInstance();
     $this->assertEquals($Uri->getParam(0),'controller');
@@ -41,7 +44,8 @@ class UriTest extends \PHPUnit_Framework_TestCase {
   
   public function testUriParamsSingleLang(){
     define('MULTI_LANGUAGE', false);
-    $_SERVER['QUERY_STRING'] = 'controller/action/extra/';
+    
+    Request::setServer('QUERY_STRING','controller/action/extra/');
     
     $Uri = Uri::getInstance();
     $this->assertEquals($Uri->getParam(0),'controller');
@@ -56,7 +60,7 @@ class UriTest extends \PHPUnit_Framework_TestCase {
     define(DEFAULT_LANGUAGE, 'nl');
     define(APPS,serialize(array('www' => array('name' => 'frontend', 'url' => 'http://www.framework.be/'))));
     
-    $_SERVER['SERVER_NAME'] = 'www.framework.be';
+    Request::setServer('SERVER_NAME','www.framework.be');
     
     $this->assertEquals(Uri::getUrl(array('controller' => 'test')),'http://www.framework.be/test/');  
     $this->assertEquals(Uri::getUrl(array('controller' => 'index')),'http://www.framework.be/');                 
@@ -73,9 +77,10 @@ class UriTest extends \PHPUnit_Framework_TestCase {
     define(DEFAULT_ACTION, 'index');
     define(DEFAULT_LANGUAGE, 'nl');
     define(APPS,serialize(array('www' => array('name' => 'frontend', 'url' => 'http://www.framework.be/') )));
-                    
-    $_SERVER['QUERY_STRING'] = 'de/controller/action/extra/';
-    $_SERVER['SERVER_NAME'] = 'www.framework.be';
+    
+    Request::setServer('QUERY_STRING','de/controller/action/extra/');
+    Request::setServer('SERVER_NAME','www.framework.be');
+
 
     $this->assertEquals(Uri::getUrl(array('controller' => 'test')),'http://www.framework.be/de/test/');  
     $this->assertEquals(Uri::getUrl(array('controller' => 'index')),'http://www.framework.be/de/');                 
@@ -93,7 +98,7 @@ class UriTest extends \PHPUnit_Framework_TestCase {
     define(DEFAULT_LANGUAGE, 'nl');
     define(APPS,serialize(array('www' => array('name' => 'frontend', 'url' => 'http://www.framework.be/') )));
                     
-    $_SERVER['SERVER_NAME'] = 'www.framework.be';
+    Request::setServer('SERVER_NAME','www.framework.be');
 
     $this->assertEquals(Uri::getUrl(array('controller' => 'test')),'http://www.framework.be/nl/test/');  
     $this->assertEquals(Uri::getUrl(array('controller' => 'index')),'http://www.framework.be/nl/');                 

@@ -28,5 +28,5 @@ define(COOKIE_NAME_LANGUAGE,'dummy-language');
 //define(MULTI_LANGUAGE, true);
 
 Framework\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__) . '/../src/');
-Framework\Autoloader::getInstance()->register();
+
 ?>
