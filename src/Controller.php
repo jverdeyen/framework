@@ -6,6 +6,7 @@ class Controller{
   protected $action;
   protected $controller;
   protected $language;
+  protected $app;
   protected $extra_params;
   protected $request;
   protected $response;
@@ -18,6 +19,7 @@ class Controller{
     $this->controller = $this->request->getController();
     $this->extra_params = Uri::getExtraParams();
     $this->language = $this->request->getLanguage();
+    $this->app = $this->request->getApp();
   }
   
   public function init(){  

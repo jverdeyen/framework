@@ -9,11 +9,13 @@ class Request {
   private $_action;
   private $_language;
   private $_app;
- 
+  private $_app_name;
+  
   public function __construct(){
     $uri = Uri::getInstance();
    
     $this->_app = self::getApp();
+    $this->_app_name = self::getAppName();
     
     self::initController();
     self::initAction();
@@ -97,19 +99,24 @@ class Request {
       
       foreach($apps as $key => $app){
         if( strpos($subdomain,$key) !== false){
-          $this->_app = $app['name'];
+          $this->_app = $app;
           break;
         }
       }   
       
-      if(trim($this->_app) == '')
-        $this->_app = $apps['default']['name'];
+      if(!is_array($this->_app))
+        $this->_app = $apps['default'];
       
-      if(trim($this->_app) == ''){
+      if(!is_array($this->_app))
         throw new \Exception('No default Application name defined!');
-      }
+      
    }
    return $this->_app;
+  }
+  
+  public function getAppName(){
+    $this->_app = $this->getApp();
+    return $this->_app['name'];
   }
  
  

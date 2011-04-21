@@ -53,7 +53,7 @@ class Uri{
     $apps = unserialize(APPS);
     
     foreach($apps as $key => $app){
-      if( strtolower(Request::getInstance()->getApp()) == strtolower($app['name'])){
+      if( strtolower(Request::getInstance()->getAppName()) == strtolower($app['name'])){
         break;;
       }
     }

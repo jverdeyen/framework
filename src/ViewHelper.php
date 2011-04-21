@@ -13,10 +13,9 @@ class ViewHelper{
     $this->action = $this->request->getAction();
     $this->language = $this->request->getLanguage();
     
-    if(!(strpos(strtolower(get_class($this)),BACKEND_APP_NAME) === false))
-      $this->template = new Template(BACKEND_TEMPLATE_DIR);
-    else
-      $this->template = new Template(FRONTEND_TEMPLATE_DIR);
+    $this->app = $this->request->getApp();
+
+    $this->template = new Template($this->app['template_dir']);
     $this->setDefaultFile();
     $this->init();
   }

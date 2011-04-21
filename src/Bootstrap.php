@@ -3,7 +3,7 @@ namespace Framework;
 
 class Bootstrap{
   
-  public function start(){
+  public static function start(){
     
     try{
       @include_once dirname(__FILE__).'/../../config/config.php';
@@ -11,7 +11,7 @@ class Bootstrap{
       @include_once dirname(__FILE__).'/../../config/db.php';
       include_once dirname(__FILE__).'/Autoloader.php';
       
-      Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__));
+      Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__).'/');
       Bootstrap::checkBootstrap();
       Autoloader::getInstance()->registerNamespace(APP_NAME,ROOT_DIR.'./');
       
@@ -19,6 +19,9 @@ class Bootstrap{
       echo FrontController::getInstance()->route();
       
     }catch(\Exception $e){
+      
+      Logger::getInstance()->exceptionHandler($e);
+
       //TODO check of er een error controller bestaat, anders standaard error tonen
       $errorController = new ErrorController();
       $errorController->exception = $e;
@@ -29,15 +32,22 @@ class Bootstrap{
   }
   
   public function checkBootstrap(){
-    //TODO alle nodige vars checken 
+
     $mandatory[] = 'APP_NAME';
     $mandatory[] = 'ROOT_DIR';
-    
+    $mandatory[] = 'DB_CHARSET';
+    $mandatory[] = 'ENVIRONMENT';
+    $mandatory[] = 'DEFAULT_CONTROLLER';
+    $mandatory[] = 'DEFAULT_ACTION';
+    $mandatory[] = 'APPS';
+
     foreach($mandatory as $value){
       if(!defined($value)){
-        throw new \Exception('Var name '.$value.' is not defined as const var.');
+        throw new \Exception('You should define'.$value.', to make the framwork work..');
       }
     }
+    
+    return true;
   }
 }
 ?>

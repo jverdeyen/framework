@@ -98,7 +98,7 @@ class Logger {
     $mail_message .= "Server-parameters:\n".print_r($_SERVER, true);
     
     //send log message via email
-    if($env == 'prod'){
+    if($env == 'prod' || $env = 'test'){
       mail('joeriverdeyen@gmail.com', APP_NAME." log ($env)", $mail_message);
     }else{
       echo nl2br($mail_message);

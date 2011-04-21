@@ -6,6 +6,7 @@ class FrontController{
   protected $_controller;
   protected $_action;
   protected $_language;
+  protected $_app;
   
   protected $_request;
   public static $_instance;
@@ -29,10 +30,10 @@ class FrontController{
 	  setlocale(LC_ALL, $this->_language."_".strtoupper($this->_language).'.utf8');
     
     if( MULTI_LANGUAGE !== false ){
-      if($this->_app == FRONTEND_APP_NAME)
+      if($this->_app['clean_url'] === true)
   	    self::redirectUrlMultiLang();
     }else{
-      if($this->_app == FRONTEND_APP_NAME)
+      if($this->_app['clean_url'] === true)
   	    self::redirectUrlSingleLang();
     }
 	  
@@ -40,7 +41,7 @@ class FrontController{
 	}
 	
 	public function route(){
-	  $controller_name = "\\".APP_NAME."\\App\\".ucfirst($this->_request->getApp())."\\Controller\\".ucfirst(strtolower($this->_request->getController()));
+	  $controller_name = "\\".APP_NAME."\\App\\".ucfirst($this->_app['name'])."\\Controller\\".ucfirst(strtolower($this->_request->getController()));
 	  if(class_exists($controller_name)){
 	    $controller = new $controller_name();
 	    return $controller->init();
