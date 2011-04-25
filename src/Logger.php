@@ -1,5 +1,6 @@
 <?php
 namespace Framework;
+use Framework\Exception\ControllerNotFoundException;
 
 class Logger {
   
@@ -42,10 +43,9 @@ class Logger {
   }
   
   public function exceptionHandler($exception) {
-   // echo "mdm".var_dump($exception);
+          
     $traceline = "#%s %s(%s): %s(%s)";
     $message = "Uncaught exception '%s' with message '%s' thrown in %s on line %s";
-    
     $trace = $exception->getTrace();
     $result = array();
     foreach($trace as $key => $point) {
@@ -73,6 +73,9 @@ class Logger {
   
     //log the error in the default php error logfile
     error_log('PHP Fatal error:  ' . $message, 0);
+    
+    if($exception instanceof ControllerNotFoundException)
+      return false;
     
     return $this->log('PHP Fatal error', $message, $backtrace);
   }

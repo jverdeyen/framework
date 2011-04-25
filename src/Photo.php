@@ -1,5 +1,7 @@
 <?php
 namespace Framework;
+use Framework\Exception\FilenameNotFoundException;
+
 
 class Photo {
    
@@ -28,23 +30,26 @@ class Photo {
     if($filename === false)
       $filename = $this->filename;
    
-      if($this->image === false){
+    if($this->image === false){
       
-        $image_info = getimagesize($filename);
-        $this->type = $image_info[2];
-        $this->width = $image_info[0];
-        $this->height = $image_info[1];
-        $this->setLastModifiedDate(); 
+      if(!file_exists($filename))
+        throw new FilenameNotFoundException('File could not be found: '.$filename);
+        
+      $image_info = getimagesize($filename);
+      $this->type = $image_info[2];
+      $this->width = $image_info[0];
+      $this->height = $image_info[1];
+      $this->setLastModifiedDate(); 
                    
-        if( $this->type == IMAGETYPE_JPEG )
-           $this->image = imagecreatefromjpeg($filename);
-        elseif( $this->type == IMAGETYPE_GIF )
-           $this->image = imagecreatefromgif($filename);
-        elseif( $this->type == IMAGETYPE_PNG ){
-          $this->image = imagecreatefrompng($filename);
-        }
-           
+      if( $this->type == IMAGETYPE_JPEG )
+         $this->image = imagecreatefromjpeg($filename);
+      elseif( $this->type == IMAGETYPE_GIF )
+         $this->image = imagecreatefromgif($filename);
+      elseif( $this->type == IMAGETYPE_PNG ){
+        $this->image = imagecreatefrompng($filename);
       }
+           
+    }
    }
    
    public function save($filename, $image_type=IMAGETYPE_JPEG, $compression=100, $permissions=null) {
@@ -212,6 +217,7 @@ class Photo {
      }
      
      $this->load();
+    
      $new_image = imagecreatetruecolor( $width, $height);
      
      if($this->type == IMAGETYPE_PNG){

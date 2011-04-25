@@ -44,6 +44,6 @@ class Autoloader {
       
     $filename = end($class).'.php';  
     array_pop($class);
-    include $this->namespaces[strtoupper($first_namespace)].implode('/',array_map('strtolower', $class)).'/'.$filename;
+    @include $this->namespaces[strtoupper($first_namespace)].implode('/',array_map('strtolower', $class)).'/'.$filename;
   }
 }

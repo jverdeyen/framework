@@ -1,5 +1,6 @@
 <?php
 namespace Framework;
+use Framework\Exception\ControllerNotFoundException;
 
 class FrontController{
 
@@ -45,9 +46,8 @@ class FrontController{
 	  if(class_exists($controller_name)){
 	    $controller = new $controller_name();
 	    return $controller->init();
-	  }
-	   
-	  throw new \Exception("Controller $controller_name could not be found.");
+	  }   
+	  throw new ControllerNotFoundException("Controller $controller_name could not be found.");
 	}
 	
 	private function redirectUrlSingleLang(){
