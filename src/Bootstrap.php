@@ -1,5 +1,6 @@
 <?php
 namespace Framework;
+use Framework\Exception\ControllerNotFoundException;
 
 class Bootstrap{
   
@@ -17,6 +18,17 @@ class Bootstrap{
       
       Logger::getInstance()->setErrorHandlers();
       echo FrontController::getInstance()->route();
+      
+    }catch(ControllerNotFoundException $e){
+      // Last resort catching
+      Uri::redirect(array('controller' => 'index'),301);
+      
+    }catch(\Twig_Error_Loader $e){
+      // Last resort catching
+      Uri::redirect(array('controller' => 'index'),301);
+    
+    }catch(\BadFunctionCallException $e){
+      Uri::redirect(array('controller' => 'index'),301);
       
     }catch(\Exception $e){
       $ErrorController = new ErrorController();

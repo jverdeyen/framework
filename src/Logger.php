@@ -1,6 +1,5 @@
 <?php
 namespace Framework;
-use Framework\Exception\ControllerNotFoundException;
 
 class Logger {
   
@@ -17,24 +16,23 @@ class Logger {
 
   public function setErrorHandlers() {
     error_reporting(0);
-    set_error_handler(array($this, 'errorHandler'), E_ALL ^ E_NOTICE);
+    set_error_handler(array($this, 'errorHandler'), E_ALL & ~E_NOTICE);
     set_exception_handler(array($this, 'exceptionHandler'));
     register_shutdown_function(array($this, 'shutdownHandler'));
   }
   
   public function errorHandler($code, $message, $filename, $line_number, $vars=array()) {
+    
     //errors that we need to log
     $error_codes = array (
                      E_ERROR        => 'PHP Fatal error',
                      E_WARNING      => 'PHP Warning',
                      E_USER_ERROR   => 'PHP User Error',
-                     E_USER_WARNING => 'PHP User Warning',
-                     E_PARSE        => 'PHP Parse Error'
+                     E_USER_WARNING => 'PHP User Warning'
                    );
+    
     if(array_key_exists($code, $error_codes)) {
       $message = $message . ' in ' . $filename . ' on line ' . $line_number;
-      
-      //log the error in the default php error logfile
       error_log($error_codes[$code] . ':  ' . $message, 0);
       
       $backtrace = $this->get_debug_print_backtrace(2);
@@ -61,7 +59,7 @@ class Logger {
     
     //trace always ends with {main}
     $result[] = '#' . ++$key . ' {main}';
-    $backtrace = implode('\n', $result);
+    $backtrace = implode('<br />', $result);
     
     $message = sprintf(
       $message,
@@ -73,10 +71,7 @@ class Logger {
   
     //log the error in the default php error logfile
     error_log('PHP Fatal error:  ' . $message, 0);
-    
-    if($exception instanceof ControllerNotFoundException)
-      return false;
-    
+        
     return $this->log('PHP Fatal error', $message, $backtrace);
   }
 
@@ -88,24 +83,19 @@ class Logger {
   
   public function log($type, $message, $backtrace='') {
     $env = ENVIRONMENT;
-    $mail_message .= "Environment:\n".$env."\n\n";
-    $mail_message .= "Type:\n".$type."\n\n";
-    $mail_message .= "Message:\n".$message."\n\n";
-    $mail_message .= "User-agent:\n".$_SERVER['HTTP_USER_AGENT']."\n\n";
-    $mail_message .= "Ip-address:\n".$_SERVER['REMOTE_ADDR']."\n\n";
-    $mail_message .= "Backtrace:\n".$backtrace."\n\n";
-    $mail_message .= "Get-parameters:\n".print_r($_GET, true)."\n";
-    $mail_message .= "Post-parameters:\n".print_r($_POST, true)."\n";
-    $mail_message .= "Cookie-parameters:\n".print_r($_COOKIE, true)."\n";
-    $mail_message .= "Session-parameters:\n".print_r($_SESSION, true)."\n";
-    $mail_message .= "Server-parameters:\n".print_r($_SERVER, true);
+    $message .= "Environment:\n".$env."\n\n";
+    $message .= "Type:\n".$type."\n\n";
+    $message .= "Message:\n".$message."\n\n";
+    $message .= "User-agent:\n".$_SERVER['HTTP_USER_AGENT']."\n\n";
+    $message .= "Ip-address:\n".$_SERVER['REMOTE_ADDR']."\n\n";
+    $message .= "Backtrace:\n".$backtrace."\n\n";
+    $message .= "Get-parameters:\n".print_r($_GET, true)."\n";
+    $message .= "Post-parameters:\n".print_r($_POST, true)."\n";
+    $message .= "Cookie-parameters:\n".print_r($_COOKIE, true)."\n";
+    $message .= "Session-parameters:\n".print_r($_SESSION, true)."\n";
+    $message .= "Server-parameters:\n".print_r($_SERVER, true);
 
-    //send log message via email
-    if($env == 'prod' || $env == 'test'){
-      mail('joeriverdeyen@gmail.com', APP_NAME." log ($env)", $mail_message);
-    }
-
-    return nl2br($mail_message);
+    return nl2br($message);
   }
 
   private function get_debug_print_backtrace($traces_to_ignore=1) {
