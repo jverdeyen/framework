@@ -12,14 +12,26 @@ class Controller{
   protected $response;
   protected $i18nTxt;
   
-  public function __construct(){
+  private $options;
+  
+  public function __construct($options = array()){
+    $this->options = $options;
     $this->request = Request::getInstance();
     $this->response = Response::getInstance();
     $this->action = $this->request->getAction();
     $this->controller = $this->request->getController();
+    $this->doControllerMapping();
     $this->extra_params = Uri::getExtraParams();
     $this->language = $this->request->getLanguage();
     $this->app = $this->request->getApp();
+  }
+  
+  private function doControllerMapping(){
+    if(is_array($this->options['controller_mapping'])){
+	    if(array_key_exists(strtolower($this->controller),$this->options['controller_mapping'])){
+	      $this->controller = $this->options['controller_mapping'][strtolower($this->controller)];
+	    } 
+	  }
   }
   
   public function init(){  

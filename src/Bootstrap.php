@@ -4,7 +4,7 @@ use Framework\Exception\ControllerNotFoundException;
 
 class Bootstrap{
   
-  public static function start(){
+  public static function start($options = array()){
     
     try{
       @include_once dirname(__FILE__).'/../../config/config.php';
@@ -17,20 +17,36 @@ class Bootstrap{
       Autoloader::getInstance()->registerNamespace(APP_NAME,ROOT_DIR.'./');
       
       Logger::getInstance()->setErrorHandlers();
-      echo FrontController::getInstance()->route();
-      
+      echo FrontController::getInstance()->route($options);
+
     }catch(ControllerNotFoundException $e){
       // Last resort catching
+      if(self::runningInDev()){
+        echo Logger::getInstance()->exceptionHandler($e);
+        exit;
+      }
       Uri::redirect(array('controller' => 'index'),301);
       
     }catch(\Twig_Error_Loader $e){
+      if(self::runningInDev()){
+        echo Logger::getInstance()->exceptionHandler($e);
+        exit;
+      }
       // Last resort catching
       Uri::redirect(array('controller' => 'index'),301);
     
     }catch(\BadFunctionCallException $e){
+      if(self::runningInDev()){
+        echo Logger::getInstance()->exceptionHandler($e);
+        exit;
+      }
       Uri::redirect(array('controller' => 'index'),301);
       
     }catch(\Exception $e){
+      if(self::runningInDev()){
+        echo Logger::getInstance()->exceptionHandler($e);
+        exit;
+      }
       $ErrorController = new ErrorController();
       $ErrorController->init($e);
     }
@@ -54,6 +70,10 @@ class Bootstrap{
     }
     
     return true;
+  }
+  
+  public static function runningInDev(){
+    return (ENVIRONMENT == 'dev');
   }
 }
 ?>

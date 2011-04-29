@@ -8,8 +8,10 @@ class FrontController{
   protected $_action;
   protected $_language;
   protected $_app;
-  
   protected $_request;
+  
+  private $_options;
+  
   public static $_instance;
   
   
@@ -29,7 +31,7 @@ class FrontController{
     $this->_language  = $this->_request->getLanguage();
 
 	  setlocale(LC_ALL, $this->_language."_".strtoupper($this->_language).'.utf8');
-    
+
     if( MULTI_LANGUAGE !== false ){
       if($this->_app['clean_url'] === true)
   	    self::redirectUrlMultiLang();
@@ -37,14 +39,35 @@ class FrontController{
       if($this->_app['clean_url'] === true)
   	    self::redirectUrlSingleLang();
     }
-	  
-    
+
 	}
 	
-	public function route(){
-	  $controller_name = "\\".APP_NAME."\\App\\".ucfirst($this->_app['name'])."\\Controller\\".ucfirst(strtolower($this->_request->getController()));
+	private function setOptions($options){
+	  if(!is_array($options))
+	    return false;
+	  
+	  $this->_options = $options;
+	}
+	
+	private function doControllerMapping(){
+	  // kijk naar een andere mapping voor de controller
+	  if(is_array($this->_options['controller_mapping'])){
+	    if(array_key_exists(strtolower($this->_controller),$this->_options['controller_mapping'])){
+	      $controller = $this->_options['controller_mapping'][strtolower($this->_controller)];
+	      return ucfirst(strtolower($controller));
+	    } 
+	  }
+	  return ucfirst(strtolower($this->_controller));   	  
+	}
+	
+	
+	public function route($options){
+	  $this->setOptions($options);
+
+	  $controller_name = "\\".APP_NAME."\\App\\".ucfirst($this->_app['name'])."\\Controller\\".$this->doControllerMapping();
+
 	  if(class_exists($controller_name)){
-	    $controller = new $controller_name();
+	    $controller = new $controller_name($this->_options);
 	    return $controller->init();
 	  }   
 	  throw new ControllerNotFoundException("Controller $controller_name could not be found.");
