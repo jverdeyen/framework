@@ -83,7 +83,7 @@ class Logger {
   
   public function log($type, $message, $backtrace='') {
     $env = ENVIRONMENT;
-    $message .= "Environment:\n".$env."\n\n";
+    $message .= "\n\nEnvironment:\n".$env."\n\n";
     $message .= "Type:\n".$type."\n\n";
     $message .= "Message:\n".$message."\n\n";
     $message .= "User-agent:\n".$_SERVER['HTTP_USER_AGENT']."\n\n";
@@ -94,7 +94,10 @@ class Logger {
     $message .= "Cookie-parameters:\n".print_r($_COOKIE, true)."\n";
     $message .= "Session-parameters:\n".print_r($_SESSION, true)."\n";
     $message .= "Server-parameters:\n".print_r($_SERVER, true);
-
+    
+    if($env == 'dev')
+      echo nl2br($message);
+      
     return nl2br($message);
   }
 
