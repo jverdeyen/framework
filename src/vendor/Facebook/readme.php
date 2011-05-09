@@ -67,4 +67,50 @@ $Facebook = Loader::getFacebook(array(
   'cookie' => true,
 ));
 
+/*
+$result = $Facebook->api(
+    '/198371116865752/feed/',
+    'post',
+    array('access_token' => $step_6_token, 'message' => 'Playing around with FB Graph..','picture' => 'http://www.geniusbikes.com/siteimages/SRAM%20Genius%2005.jpg', 'name' => 'yeah')
+);
+
+$result = $Facebook->api(
+    '/'.$result['id'].'/comments',
+    'post',
+    array('access_token' => $step_6_token, 'message' => 'First comments')
+);
+
+$result = $Facebook->api(
+    '/'.$result['id'].'/',
+    'delete',
+    array('access_token' => $step_6_token, 'message' => 'Playing around with FB Graph..','picture' => 'http://www.geniusbikes.com/siteimages/SRAM%20Genius%2005.jpg', 'name' => 'yeah')
+);
+*/
+
+/*
+curl -F 'access_token={ACCESS_TOKEN_GENERATED_FROM_STEP_6}' \
+-F 'message={MESSAGE}' \
+-F 'link={HYPER_LINK}' \
+-F 'picture={IMAGE}' \
+-F 'name={IMAGE_NAME}' \
+-F 'caption={IMAGE_CAPTION}' \
+-F 'description={DESCRIPTION}' \
+-F 'actions={JSON_ENCODED_STRING_FOR_EXTRA_HYPERLINKS}' \
+https://graph.facebook.com/{PAGE_ID}/feed
+
+e.g.
+
+curl -F 'access_token=303409109772222|60ad2f9f47cdaf5e03176824-100000098944650|121364427524405|LDf-47eJi-dYgjourPlz4Kp78Jg' \
+-F 'message=Message \
+-F 'link=http://www.link.com \
+-F 'picture=http://link.com/story.jpg' \
+-F 'name=Name \
+-F 'caption=Caption \
+-F 'description=Description \
+-F 'actions={"name": "Caption1", "link": "http://link.com"}' \
+https://graph.facebook.com/121364427524405/feed
+
+*/
+
+
 ?>

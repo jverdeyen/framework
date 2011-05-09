@@ -62,6 +62,18 @@ class Validator{
     return true;
   }
   
+  public function validateDob($var){
+    $validateString = self::validateString($var);
+    
+    if(!($validateString === true))
+      return $validateString;
+    
+    if(strlen($var) <= 5)
+      return self::TOO_SHORT;
+  
+    return true;
+  }
+  
   public function validateCity($var){
     $validateString = self::validateString($var);
     
