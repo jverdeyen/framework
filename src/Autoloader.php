@@ -16,6 +16,10 @@ class Autoloader {
     
     require_once(dirname(__FILE__).'/vendor/Twig/Extensions/Autoloader.php');
     \Twig_Extensions_Autoloader::register();
+    
+    require_once(dirname(__FILE__).'/vendor/Assetic/Assetic/Autoloader.php');
+    \Assetic_Autoloader::register();
+    
   }
   
   public static function getInstance() {
