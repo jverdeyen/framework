@@ -59,9 +59,10 @@ abstract class BaseCompressorFilter implements FilterInterface
     protected function compress($content, $type, $options = array())
     {
         // prepend the start of the command
+        
         $options = array_merge(array(
-            $this->javaPath,
-            '-jar',
+         //   $this->javaPath,
+        //    '-jar',
             $this->jarPath,
             '--type',
             $type,
