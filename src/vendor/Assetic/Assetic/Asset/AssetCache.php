@@ -23,7 +23,9 @@ class AssetCache implements AssetInterface
 {
     private $asset;
     private $cache;
-
+    private $cached = false;
+    private $cachekey;
+    
     public function __construct(AssetInterface $asset, CacheInterface $cache)
     {
         $this->asset = $asset;
@@ -43,7 +45,10 @@ class AssetCache implements AssetInterface
     public function load(FilterInterface $additionalFilter = null)
     {
         $cacheKey = self::getCacheKey($this->asset, $additionalFilter, 'load');
+         $this->cachekey = $cacheKey;
+         
         if ($this->cache->has($cacheKey)) {
+            $this->cached = true;
             $this->asset->setContent($this->cache->get($cacheKey));
             return;
         }
@@ -55,7 +60,10 @@ class AssetCache implements AssetInterface
     public function dump(FilterInterface $additionalFilter = null)
     {
         $cacheKey = self::getCacheKey($this->asset, $additionalFilter, 'dump');
+        $this->cachekey = $cacheKey;
+        
         if ($this->cache->has($cacheKey)) {
+            $this->cached = true;
             return $this->cache->get($cacheKey);
         }
 
@@ -99,6 +107,10 @@ class AssetCache implements AssetInterface
     {
         return $this->asset->getLastModified();
     }
+    
+    public function getCacheKeyValue(){
+      return $this->cachekey;
+    }
 
     /**
      * Returns a cache key for the current asset.
@@ -134,5 +146,9 @@ class AssetCache implements AssetInterface
         }
 
         return md5($cacheKey.$salt);
+    }
+    
+    public function isCached(){
+      return $this->cached;
     }
 }
