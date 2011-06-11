@@ -12,19 +12,18 @@ class ViewHelper{
     $this->controller = $this->request->getController();
     $this->action = $this->request->getAction();
     $this->language = $this->request->getLanguage();
-    
     $this->app = $this->request->getApp();
 
     $this->template = new Template($this->app['template_dir']);
     $this->setDefaultFile();
+    $this->preDispatch();
     $this->init();
-  }
-  
-  public function init(){
     
   }
+
   
   public function fetch(){
+    $this->postDispatch();
     return $this->template->fetch($this->file);
   }
   
@@ -40,4 +39,8 @@ class ViewHelper{
     $file = strtolower(preg_replace('/[A-Z]/', '_$0',$file));
     $this->file = 'helper/'.$file.'.tpl';
   }
+  
+  public function preDispatch(){}
+  public function postDispatch(){}
+  public function init(){}
 }
