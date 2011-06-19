@@ -11,6 +11,7 @@ class Response {
   private $canonical;
   private $index;
   private $follow;
+  private $facebook_properties = array();
   
   private function __construct() {
     $this->title = $this->keywords = $this->description = $this->canonical = '';
@@ -24,6 +25,14 @@ class Response {
     return self::$instance;
   }
   
+  public function addFacebookProperty($property,$value){
+    $this->facebook_properties[$property] = $value;
+  }
+  
+  public function getFacebookProperties(){
+    return $this->facebook_properties;
+  }
+    
   public function setTitle($title) {
     $this->title = $title;
   }
