@@ -16,7 +16,7 @@ class Database extends \PDO{
       
       if(!is_array($database))
         throw new \Exception('Invalid database requested.');
-        
+        var_dump($database);
       self::$connections[$type] = new self('mysql:dbname='.$database['dbname'].';host='.$database['host'],
                                             $database['username'],
                                             $database['password'],
@@ -62,7 +62,13 @@ class Database extends \PDO{
 
   
   public static function getLogin($type = 'r'){
-    $databases = unserialize(DATABASE);
+    $yaml_config = ROOT_DIR.'config/database.yml';
+    
+    if(file_exists($yaml_config))
+      $databases = \sfYaml::load(ROOT_DIR.'config/database.yml');
+    else    
+      $databases = unserialize(DATABASE);
+      
     $database = $databases[$type];
     return $database;
   }

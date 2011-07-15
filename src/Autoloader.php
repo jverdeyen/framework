@@ -20,6 +20,8 @@ class Autoloader {
     require_once(dirname(__FILE__).'/vendor/Assetic/Assetic/Autoloader.php');
     \Assetic_Autoloader::register();
     
+    require_once(dirname(__FILE__).'/vendor/sfYaml/sfYaml.php');
+    
   }
   
   public static function getInstance() {
