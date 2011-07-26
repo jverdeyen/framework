@@ -22,6 +22,13 @@ class Autoloader {
     
     require_once(dirname(__FILE__).'/vendor/sfYaml/sfYaml.php');
     
+    require_once(dirname(__FILE__).'/vendor/Doctrine/Common/ClassLoader.php');
+    $classLoader = new \Doctrine\Common\ClassLoader('Doctrine', dirname(__FILE__).'/vendor/');
+    $classLoader->register(); 
+    
+    $classloader = new \Doctrine\Common\ClassLoader('Symfony', dirname(__FILE__).'/vendor/Doctrine');
+    $classloader->register();
+    
   }
   
   public static function getInstance() {
