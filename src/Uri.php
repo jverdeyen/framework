@@ -39,7 +39,7 @@ class Uri{
     }
 	}
 	
-	private static function constructUrl($params,$url){
+	private static function constructUrl($params,$url,$app_name){
 	  if(is_array($params['extra'])){
 	    $i = 3;
 	    foreach($params['extra'] as $key => $value){
@@ -53,9 +53,14 @@ class Uri{
     $apps = unserialize(APPS);
     
     foreach($apps as $key => $app){
-      if( strtolower(Request::getInstance()->getAppName()) == strtolower($app['name'])){
-        break;;
+      if($app_name === false){
+        if( strtolower(Request::getInstance()->getAppName()) == strtolower($app['name']))
+          break;
+      }else{
+        if( strtolower($app_name) == strtolower($app['name']))
+          break;
       }
+      
     }
         
     if(trim($app['url']) == ''){
@@ -70,7 +75,7 @@ class Uri{
     return $url;
 	}
 	
-	private static function getUrlSingleLanguage($params){
+	private static function getUrlSingleLanguage($params,$app_name = false){
 	  $request = Request::getInstance();
 	  
     $url = array();
@@ -90,10 +95,10 @@ class Uri{
       }  
     }
 	  
-	  return self::constructUrl($params,$url);
+	  return self::constructUrl($params,$url,$app_name);
 	}
 	
-	private static function getUrlMultiLanguage($params){
+	private static function getUrlMultiLanguage($params,$app_name = false){
 	  $request = Request::getInstance();
 	  $language = $request->getLanguage();
 	  
@@ -117,15 +122,15 @@ class Uri{
       }  
     }
 	  
-	  return self::constructUrl($params,$url);
+	  return self::constructUrl($params,$url,$app_name);
 	}
 	
-	public static function getUrl($params){
+	public static function getUrl($params,$app_name = false){
 	  if(MULTI_LANGUAGE === false){
-	    return self::getUrlSingleLanguage($params);
+	    return self::getUrlSingleLanguage($params,$app_name);
 	  }
 	  
-	  return self::getUrlMultiLanguage($params);
+	  return self::getUrlMultiLanguage($params,$app_name);
 	}
 	
 	public static function redirect($params,$http_response_code = '302'){
