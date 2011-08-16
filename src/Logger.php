@@ -26,7 +26,7 @@ class Logger {
     //errors that we need to log
     $error_codes = array (
                      E_ERROR        => 'PHP Fatal error',
-                     E_WARNING      => 'PHP Warning',
+                    // E_WARNING      => 'PHP Warning',
                      E_USER_ERROR   => 'PHP User Error',
                      E_USER_WARNING => 'PHP User Warning'
                    );
@@ -78,7 +78,7 @@ class Logger {
   public function shutdownHandler() {
     $error = error_get_last();
     //only handle fatal errors
-    var_dump($error);
+    //var_dump($error);
     $this->errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
   }
   

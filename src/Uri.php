@@ -129,6 +129,10 @@ class Uri{
 	}
 	
 	public static function redirect($params,$http_response_code = '302'){
+	  
+	  if($http_response_code == false)
+	    $http_response_code = '302';
+	  
 	  $url = self::getUrl($params);
 	  header('Location: '.$url,true,$http_response_code);
 	  exit;

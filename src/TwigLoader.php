@@ -6,7 +6,7 @@ class TwigLoader {
   private static $template;
   private static $string;
   
-  public function getTwigLoader($type = 'template', $template_dir = false){
+  public static function getTwigLoader($type = 'template', $template_dir = false){
     if($type == 'template')
       return self::getTemplate($template_dir);
     elseif($type == 'string')
@@ -27,7 +27,7 @@ class TwigLoader {
     return self::$string;
   }
   
-  private function getTemplate($template_dir){
+  private static function getTemplate($template_dir){
 
     if(!self::$template) {
 
