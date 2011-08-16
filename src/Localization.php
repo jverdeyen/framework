@@ -33,6 +33,13 @@ class Localization {
     return trim($ip);
   }
   
+  public function getHost(){
+    if(ENVIRONMENT == 'dev'){
+      return 'purk';
+    }
+    return gethostbyaddr(self::getIp());
+  }
+  
   public function getBrowserLanguage($supported_languages=array()) {
     if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
       $languages = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);

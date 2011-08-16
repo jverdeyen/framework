@@ -12,11 +12,11 @@ class Database extends \PDO{
   
   public static function getConnection($type = 'r'){
     if(!self::$connections[$type]){
-      $database = self::getLogin($type);
+      $database = Config::getConfig($type);
       
       if(!is_array($database))
         throw new \Exception('Invalid database requested.');
-        
+
       self::$connections[$type] = new self('mysql:dbname='.$database['dbname'].';host='.$database['host'],
                                             $database['username'],
                                             $database['password'],
@@ -59,13 +59,7 @@ class Database extends \PDO{
   public function execute($query,$params = array()){
     return self::executeQuery($query);
   }
-
-  
-  public static function getLogin($type = 'r'){
-    $databases = unserialize(DATABASE);
-    $database = $databases[$type];
-    return $database;
-  }
+ 
   
 }
 ?>

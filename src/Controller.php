@@ -26,6 +26,14 @@ class Controller{
     $this->app = $this->request->getApp();
   }
   
+  public function redirect($params,$http_response_code = false){
+    Uri::redirect($params,$http_response_code);
+  }
+  
+  public function getUrl($params){
+    return Uri::getUrl($params);
+  }
+    
   private function doControllerMapping(){
     if(is_array($this->options['controller_mapping'])){
 	    if(array_key_exists(strtolower($this->controller),$this->options['controller_mapping'])){
@@ -54,6 +62,22 @@ class Controller{
   protected function loadI18nText(){
     $i18n = i18nTxt::getInstance($this->language);
     $this->i18nTxt = $i18n->getTxt();
+  }
+  
+  public static function setNotice($message){
+    View\Flash::setNotice($message);
+  }
+  
+  public static function setError($message){
+    View\Flash::setError($message);
+  }
+  
+  public static function setSuccess($message){
+    View\Flash::setSuccess($message);
+  }
+  
+  public static function setWarning($message){
+    View\Flash::setWarning($message);
   }
   
 

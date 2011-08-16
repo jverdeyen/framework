@@ -31,7 +31,10 @@ class FrontController{
     $this->_language  = $this->_request->getLanguage();
 
 	  setlocale(LC_ALL, $this->_language."_".strtoupper($this->_language).'.utf8');
+	  
 
+    
+    
     if( MULTI_LANGUAGE !== false ){
       if($this->_app['clean_url'] === true)
   	    self::redirectUrlMultiLang();
@@ -123,12 +126,12 @@ class FrontController{
   }
   
   private function createUrlAndRedirect($param){
-    $redirect_suggestion = ROOT_URL.implode('/',$param);  
+    $redirect_suggestion = $this->_app['url'].implode('/',$param);  
     if(substr($redirect_suggestion,-1) != '/')
       $redirect_suggestion .= '/';
     
     $current_url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-        
+            
     if($current_url !=  $redirect_suggestion){
       header('Location: '.$redirect_suggestion,true,302);
       exit;

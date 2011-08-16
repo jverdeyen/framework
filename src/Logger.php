@@ -78,6 +78,7 @@ class Logger {
   public function shutdownHandler() {
     $error = error_get_last();
     //only handle fatal errors
+    //var_dump($error);
     $this->errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
   }
   

@@ -11,15 +11,29 @@ class Autoloader {
     ini_set('unserialize_callback_func', 'spl_autoload_call');
     spl_autoload_register(array($this, 'autoload'));
     
-    require_once(dirname(__FILE__).'/vendor/Twig/Autoloader.php');
+    # pear install twig/twig
+    require_once 'Twig/Autoloader.php';
     \Twig_Autoloader::register();
     
-    require_once(dirname(__FILE__).'/vendor/Twig/Extensions/Autoloader.php');
+    require_once dirname(__FILE__).'/vendor/Twig/Extensions/Autoloader.php';
     \Twig_Extensions_Autoloader::register();
     
-    require_once(dirname(__FILE__).'/vendor/Assetic/Assetic/Autoloader.php');
+    require_once dirname(__FILE__).'/vendor/Assetic/Assetic/Autoloader.php';
     \Assetic_Autoloader::register();
     
+    # pear install symfony/YAML
+    require_once 'SymfonyComponents/YAML/sfYaml.php';
+    
+    # sudo pear install pear.doctrine-project.org/DoctrineCommon-2.1.0
+    # sudo pear install pear.doctrine-project.org/DoctrineDBAL-2.1.0
+    # sudo pear install pear.doctrine-project.org/DoctrineORM-2.1.0
+    require_once 'Doctrine/Common/ClassLoader.php';
+    $classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
+    $classLoader->register();
+    
+    #sudo pear install swift/swift
+    require_once 'swift_required.php';
+        
   }
   
   public static function getInstance() {
@@ -38,6 +52,9 @@ class Autoloader {
     $temp = $class;
     $class = explode('\\',$class);    
     $first_namespace = ($class[0] == '') ? strtoupper($class[1]) : strtoupper($class[0]);
+    
+    if(!is_array($this->namespaces))
+      return false;
     
     if(!array_key_exists($first_namespace, $this->namespaces))
       return false;
