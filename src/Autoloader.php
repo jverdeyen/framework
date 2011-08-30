@@ -31,6 +31,9 @@ class Autoloader {
     $classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
     $classLoader->register();
     
+    $classLoader = new \Doctrine\Common\ClassLoader('Symfony', 'Doctrine');
+    $classLoader->register();
+    
     #sudo pear install swift/swift
     require_once 'swift_required.php';
         
@@ -65,6 +68,12 @@ class Autoloader {
       
     $filename = end($class).'.php';  
     array_pop($class);
-    @include $this->namespaces[strtoupper($first_namespace)].implode('/',array_map('strtolower', $class)).'/'.$filename;
+    $file =  $this->namespaces[strtoupper($first_namespace)].implode('/',array_map('strtolower', $class)).'/'.$filename;
+
+    if(ENVIRONMENT == 'dev'){
+      include $file;
+    }else{
+      @include $file;
+    }
   }
 }
