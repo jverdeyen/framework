@@ -10,11 +10,11 @@ class Bootstrap{
       @include_once dirname(__FILE__).'/../../config/config.php';
       @include_once dirname(__FILE__).'/../../include/global_vars.php';
       @include_once dirname(__FILE__).'/../../config/db.php';
-      include_once dirname(__FILE__).'/Autoloader.php';
+      include_once dirname(__FILE__).'/autoloader/Autoloader.php';
       
-      Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__).'/');
+      Autoloader\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__).'/');
       Bootstrap::checkBootstrap();
-      Autoloader::getInstance()->registerNamespace(APP_NAME,ROOT_DIR.'./');
+      Autoloader\Autoloader::getInstance()->registerNamespace(APP_NAME,ROOT_DIR.'./');
       
       Logger::getInstance()->setErrorHandlers();
       echo FrontController::getInstance()->route($options);
