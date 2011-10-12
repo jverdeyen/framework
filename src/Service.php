@@ -27,8 +27,8 @@ class Service{
     Uri::redirect($params,$http_response_code);
   }
   
-  public function getUrl($params){
-    return Uri::getUrl($params);
+  public function getUrl($params,$app = false,$cleanup = true){
+    return Uri::getUrl($params,$app,$cleanup);
   }
 
 }

@@ -75,7 +75,7 @@ class Uri{
     return $url;
 	}
 	
-	private static function getUrlSingleLanguage($params,$app_name = false){
+	private static function getUrlSingleLanguage($params,$app_name = false,$cleanup = true){
 	  $request = Request::getInstance();
 	  
     $url = array();
@@ -88,7 +88,7 @@ class Uri{
 	  if($params['action'] != '')
 	    $url[1] = $params['action'];
 	  
-	  if($url[1] == DEFAULT_ACTION && !is_array($params['extra'])){
+	  if($url[1] == DEFAULT_ACTION && !is_array($params['extra']) && $cleanup === true){
       unset($url[1]);
       if($url[0] == DEFAULT_CONTROLLER){
         unset($url[0]);
@@ -98,7 +98,7 @@ class Uri{
 	  return self::constructUrl($params,$url,$app_name);
 	}
 	
-	private static function getUrlMultiLanguage($params,$app_name = false){
+	private static function getUrlMultiLanguage($params,$app_name = false,$cleanup = true){
 	  $request = Request::getInstance();
 	  $language = $request->getLanguage();
 	  
@@ -115,7 +115,7 @@ class Uri{
 	  if($params['language'] != '')
 	    $url[0] = $params['language'];
 	  
-	  if($url[2] == DEFAULT_ACTION && !is_array($params['extra'])){
+	  if($url[2] == DEFAULT_ACTION && !is_array($params['extra']) && $cleanup === true){
       unset($url[2]);
       if($url[1] == DEFAULT_CONTROLLER){
         unset($url[1]);
@@ -125,12 +125,12 @@ class Uri{
 	  return self::constructUrl($params,$url,$app_name);
 	}
 	
-	public static function getUrl($params,$app_name = false){
+	public static function getUrl($params,$app_name = false,$cleanup = true){
 	  if(MULTI_LANGUAGE === false){
-	    return self::getUrlSingleLanguage($params,$app_name);
+	    return self::getUrlSingleLanguage($params,$app_name,$cleanup);
 	  }
 	  
-	  return self::getUrlMultiLanguage($params,$app_name);
+	  return self::getUrlMultiLanguage($params,$app_name,$cleanup);
 	}
 	
 	public static function redirect($params,$http_response_code = '302'){

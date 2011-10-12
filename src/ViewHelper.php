@@ -40,6 +40,10 @@ class ViewHelper{
     $this->file = 'helper/'.$file.'.tpl';
   }
   
+  public function getUrl($params,$app = false,$cleanup = true){
+    return Uri::getUrl($params,$app,$cleanup);
+  }
+  
   public function preDispatch(){}
   public function postDispatch(){}
   public function init(){}

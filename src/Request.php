@@ -74,6 +74,10 @@ class Request {
 	  if(in_array($this->_language,unserialize(LANGUAGES)))
       self::setCookie(COOKIE_NAME_LANGUAGE,$this->_language);
   }
+  
+  public function getParam($i){
+    return Uri::getInstance()->getParam($i);
+  }
  
   public function getController(){
     return $this->_controller;

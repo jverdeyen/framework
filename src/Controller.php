@@ -9,6 +9,7 @@ class Controller{
   protected $app;
   protected $extra_params;
   protected $request;
+  protected $session;
   protected $response;
   protected $i18nTxt;
   
@@ -18,6 +19,7 @@ class Controller{
     $this->options = $options;
     $this->request = Request::getInstance();
     $this->response = Response::getInstance();
+    $this->session = Session::getInstance();
     $this->action = $this->request->getAction();
     $this->controller = $this->request->getController();
     $this->doControllerMapping();
@@ -33,7 +35,7 @@ class Controller{
   public function getUrl($params){
     return Uri::getUrl($params);
   }
-    
+      
   private function doControllerMapping(){
     if(is_array($this->options['controller_mapping'])){
 	    if(array_key_exists(strtolower($this->controller),$this->options['controller_mapping'])){
