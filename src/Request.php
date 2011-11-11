@@ -135,11 +135,26 @@ class Request {
    public function getPost($name = false) {
      if(is_array($_POST[$name])){
        foreach($_POST[$name] as $key => $value){
-         $_POST[$name][$key] = stripslashes($value);
+         if(is_array($value)){
+           foreach($_POST[$name][$key] as $key2 => $value2){
+             $_POST[$name][$key][$key2] = stripslashes($value2);
+           }
+         }else{
+           $_POST[$name][$key] = stripslashes($value);
+         }
        }
        return $_POST[$name];
      }
+
      return stripslashes($_POST[$name]);
+   }
+   
+   public function getPostArray(){
+    foreach($_POST as $key => $value){
+      $_POST[$key] = self::getPost($key);
+    }
+    
+    return $_POST;
    }
  
    public function issetPost($name) {
