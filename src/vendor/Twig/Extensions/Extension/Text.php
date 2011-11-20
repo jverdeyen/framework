@@ -25,6 +25,7 @@ class Twig_Extensions_Extension_Text extends Twig_Extension
             'truncate' => new Twig_Filter_Function('twig_truncate_filter', array('needs_environment' => true)),
             'wordwrap' => new Twig_Filter_Function('twig_wordwrap_filter', array('needs_environment' => true)),
             'nl2br'    => new Twig_Filter_Function('twig_nl2br_filter', array('pre_escape' => 'html', 'is_safe' => array('html'))),
+            'strftime' => new Twig_Filter_Function('twig_strftime_filter', array('pre_escape' => 'html', 'is_safe' => array('html'))),
         );
     }
 
@@ -37,6 +38,16 @@ class Twig_Extensions_Extension_Text extends Twig_Extension
     {
         return 'Text';
     }
+}
+
+function twig_strftime_filter($d, $format = "%A %d %B %Y", $language = 'nl_NL') 
+{ 
+    if($d instanceof DateTime) 
+    { 
+        $d = $d->format('Y/m/d'); 
+    }
+    setlocale(LC_ALL,$language); 
+    return utf8_encode(strftime($format, $d)); 
 }
 
 function twig_nl2br_filter($value, $sep = '<br />')
