@@ -53,8 +53,9 @@ class Photo {
    }
    
    public function save($filename, $image_type=IMAGETYPE_JPEG, $compression=100, $permissions=null) {
-     
-     mkdir($this->cache_dir);
+     if(!is_dir($this->cache_dir)){
+       mkdir($this->cache_dir);
+     }
      
       if( $this->type == IMAGETYPE_JPEG )
          imagejpeg($this->image,$filename,$compression);
