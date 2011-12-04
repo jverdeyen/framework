@@ -129,7 +129,7 @@ class Request {
       return $this->_app['cookie_name_language'];
     }
     
-    return COOKIE_NAME_LANGUAGE;
+    return $this->_app['name']."_language_cookie";
   }
  
  
