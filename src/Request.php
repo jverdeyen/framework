@@ -60,9 +60,9 @@ class Request {
 	  if(Uri::getInstance()->getParam(0)){
 	     // check in de url
 	    $this->_language = Uri::getInstance()->getParam(0);
-	  }elseif(self::getCookie(COOKIE_NAME_LANGUAGE)){ 
+	  }elseif(self::getCookie($this->getAppLanguageCookieName())){ 
 	    // check de cookie
-	    $this->_language = self::getCookie(COOKIE_NAME_LANGUAGE);
+	    $this->_language = self::getCookie($this->getAppLanguageCookieName());
 	  }elseif($browser_lang){
 	    // check de browser language
 	    $this->_language = $browser_lang;
@@ -72,7 +72,7 @@ class Request {
 	  }
 	  
 	  if(in_array($this->_language,unserialize(LANGUAGES)))
-      self::setCookie(COOKIE_NAME_LANGUAGE,$this->_language);
+      self::setCookie($this->getAppLanguageCookieName(),$this->_language);
   }
   
   public function getParam($i){
@@ -122,6 +122,15 @@ class Request {
     $this->_app = $this->getApp();
     return $this->_app['name'];
   }
+  
+  public function getAppLanguageCookieName(){
+    $this->_app = $this->getApp();
+    if($this->_app['cookie_name_language'] != ''){
+      return $this->_app['cookie_name_language'];
+    }
+    
+    return $this->_app['name']."_language_cookie";
+  }
  
  
    public function getServer($name) {
@@ -135,11 +144,26 @@ class Request {
    public function getPost($name = false) {
      if(is_array($_POST[$name])){
        foreach($_POST[$name] as $key => $value){
-         $_POST[$name][$key] = stripslashes($value);
+         if(is_array($value)){
+           foreach($_POST[$name][$key] as $key2 => $value2){
+             $_POST[$name][$key][$key2] = stripslashes($value2);
+           }
+         }else{
+           $_POST[$name][$key] = stripslashes($value);
+         }
        }
        return $_POST[$name];
      }
+
      return stripslashes($_POST[$name]);
+   }
+   
+   public function getPostArray(){
+    foreach($_POST as $key => $value){
+      $_POST[$key] = self::getPost($key);
+    }
+    
+    return $_POST;
    }
  
    public function issetPost($name) {

@@ -18,6 +18,15 @@ class MailTemplate {
   public function fetch($template = false){
     if($template === false)
       $template = $this->template;
+    
+    $object_vars = get_object_vars($this);
+    if(is_array($object_vars)){
+      foreach($object_vars as $key => $var){
+        if(!in_array($key,array('vars','template'))){
+          $this->set($key,$var);
+        }
+      }
+    }
 
     $Twig = TwigLoader::getTwigLoader('string');
     $template = $Twig->loadTemplate($this->template);

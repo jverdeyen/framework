@@ -38,11 +38,16 @@ class TwigLoader {
         'trim_blocks' => true,
         //'strict_variables' => true
       ));
+            
        $twig->addExtension(new \Twig_Extensions_Extension_Text());
       self::$template = $twig;
     }
     
     return self::$template;
   }
+  
+  
 }
+
+
 ?>
