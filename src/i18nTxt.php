@@ -15,7 +15,8 @@ class i18nTxt{
 
 
 	private function __construct($lang){
-	  include_once ROOT_DIR.'i18n/'.$lang.'/index.php';
+	  if(file_exists(ROOT_DIR.'i18n/'.$lang.'/index.php'))
+	    include_once ROOT_DIR.'i18n/'.$lang.'/index.php';
 	  self::$text = $_i18nTxt;
 	}
 	
