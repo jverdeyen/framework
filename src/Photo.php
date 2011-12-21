@@ -69,15 +69,20 @@ class Photo {
    
    public function output($compression=75,$image_type=IMAGETYPE_JPEG) {
       if($this->cache_file === false){
-        if( $this->type == IMAGETYPE_JPEG )
-           imagejpeg($this->image,NULL,$compression);
-        elseif( $this->type == IMAGETYPE_GIF )
-           imagegif($this->image);         
+        if( $this->type == IMAGETYPE_JPEG ){
+          header("Content-type: image/jpg");
+          imagejpeg($this->image,NULL,$compression);
+        }         
+        elseif( $this->type == IMAGETYPE_GIF ){
+          header("Content-type: image/gif");
+          imagegif($this->image);
+        }             
         elseif( $this->type == IMAGETYPE_PNG ){
           header("Content-type: image/png");
           imagepng($this->image);
         }
       }else{
+        header("Content-type: image/png");
         readfile($this->cache_file);
       }
        

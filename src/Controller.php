@@ -35,6 +35,10 @@ class Controller{
   public function getUrl($params,$app = false, $cleanup = true){
     return Uri::getUrl($params, $app, $cleanup);
   }
+  
+  public function getFlash(){
+    return new View\Flash();
+  }
       
   private function doControllerMapping(){
     if(is_array($this->options['controller_mapping'])){
