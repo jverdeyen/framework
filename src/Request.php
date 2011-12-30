@@ -86,7 +86,10 @@ class Request {
   public function getAction(){
     return $this->_action;
   }
- 
+  
+  public function setAction($x){
+    return $this->_action = $x;
+  }
   public function getLanguage(){
     return $this->_language;
   }
