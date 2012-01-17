@@ -33,6 +33,11 @@ class Controller{
   }
   
   public function getUrl($params,$app = false, $cleanup = true){
+    if($params['controller'] == '')
+      $params['controller'] = $this->controller;
+    if($params['action'] == '')
+      $params['action'] = $this->action;
+    
     return Uri::getUrl($params, $app, $cleanup);
   }
   
