@@ -35,7 +35,7 @@ class Autoloader {
     $classLoader->register();
     
     #sudo pear install swift/swift
-    require_once 'swift_required.php';
+    //require_once 'swift_required.php';
         
   }
   

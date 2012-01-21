@@ -4,6 +4,7 @@
     <testsuite name="Framework">
         <file>framework/UriTest.php</file>
         <file>framework/RequestTest.php</file>      
+        <file>framework/RouterTest.php</file>      
     </testsuite>
   </testsuites>
 

@@ -14,7 +14,7 @@ class Service{
     $this->controller = $this->getRequest()->getController();
     $this->action = $this->getRequest()->getAction();
     $this->language = $this->getRequest()->getLanguage();
-    $this->extra_params = Uri::getExtraParams();
+    $this->extra_params = $this->getRequest()->getExtraParams();
   }
   
   public function getController() { return $this->getRequest()->getController(); } 

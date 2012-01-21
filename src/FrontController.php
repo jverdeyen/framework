@@ -8,9 +8,10 @@ class FrontController{
   protected $_action;
   protected $_language;
   protected $_app;
-  protected $_request;
+  protected $Request;
   
   private $_options;
+  private $Router;
   
   public static $_instance;
   
@@ -24,25 +25,35 @@ class FrontController{
 	private function __construct(){
 	  Session::start();
 	  
-	  $this->_request = Request::getInstance();
-    $this->_app = $this->_request->getApp();
-    $this->_controller  = $this->_request->getController();
-    $this->_action  = $this->_request->getAction();
-    $this->_language  = $this->_request->getLanguage();
+	  $caching = true;
+	  if(ENVIRONMENT == 'dev')
+	    $caching = false;
+	    
+	  $this->Router = Router\Router::getInstance($caching);
+	  $this->Request = Request::getInstance();
 
-	  setlocale(LC_ALL, $this->_language."_".strtoupper($this->_language).'.utf8');
+
+	  $this->Router->route();
+	  $this->_app = $this->Request->getApp();
+    $this->_controller  = $this->Request->getController();
+    $this->_action  = $this->Request->getAction();
+    $this->_language  = $this->Request->getLanguage();
+	//  var_dump($this->Request);
 	  
+	  
+	  
+	  setlocale(LC_ALL, $this->_language."_".strtoupper($this->_language).'.utf8');
 
-    
-    
-    if( MULTI_LANGUAGE !== false ){
-      if($this->_app['clean_url'] === true)
-  	    self::redirectUrlMultiLang();
-    }else{
-      if($this->_app['clean_url'] === true)
-  	    self::redirectUrlSingleLang();
+    if(!$this->Router->foundMapping()){
+      if( MULTI_LANGUAGE !== false ){
+        if($this->_app['clean_url'] === true)
+    	    self::redirectUrlMultiLang();
+      }else{
+        if($this->_app['clean_url'] === true)
+    	    self::redirectUrlSingleLang();
+      }
     }
-
+  
 	}
 	
 	private function setOptions($options){
@@ -52,6 +63,7 @@ class FrontController{
 	  $this->_options = $options;
 	}
 	
+	// This will be deprecated.. due to the new mapping
 	private function doControllerMapping(){
 	  // kijk naar een andere mapping voor de controller
 	  if(is_array($this->_options['controller_mapping'])){
@@ -68,7 +80,6 @@ class FrontController{
 	  $this->setOptions($options);
 
 	  $controller_name = "\\".APP_NAME."\\App\\".ucfirst($this->_app['name'])."\\Controller\\".$this->doControllerMapping();
-
 	  if(class_exists($controller_name)){
 	    $controller = new $controller_name($this->_options);
 	    return $controller->init();

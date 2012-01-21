@@ -4,7 +4,7 @@ use Framework;
 
 error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 
-require_once dirname(__FILE__) .'/../src/Autoloader.php';
+require_once dirname(__FILE__) .'/../src/autoloader/Autoloader.php';
 
 define(ROOT_DIR,dirname(__FILE__) .'/../../');
 define(APP_NAME,'Dummy');
@@ -27,6 +27,6 @@ define(COOKIE_NAME_LANGUAGE,'dummy-language');
 
 //define(MULTI_LANGUAGE, true);
 
-Framework\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__) . '/../src/');
+\Framework\Autoloader\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__) . '/../src/');
 
 ?>

@@ -19,6 +19,11 @@ class Uri{
 		  array_pop(self::$params);
 		}
 	}
+	
+	
+	public function getParams(){
+	  return self::$params;
+	}
 
 	public function getParam($key){
 		if(array_key_exists($key, self::$params))
@@ -62,7 +67,13 @@ class Uri{
       }
       
     }
-        
+
+    $Router = \Framework\Router\Router::getInstance();
+    $url_parts = $Router->findAUrlMapping($url);
+    
+    if($url_parts != false)
+      return $app['url'].substr($url_parts,1);
+    
     if(trim($app['url']) == ''){
       $url = $apps['default']['url'].implode('/',$url);;
     }else{

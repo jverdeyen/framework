@@ -8,7 +8,7 @@ class Controller{
   protected $language;
   protected $app;
   protected $extra_params;
-  protected $request;
+  protected $Request;
   protected $session;
   protected $response;
   protected $i18nTxt;
@@ -17,15 +17,15 @@ class Controller{
   
   public function __construct($options = array()){
     $this->options = $options;
-    $this->request = Request::getInstance();
+    $this->Request = Request::getInstance();
     $this->response = Response::getInstance();
     $this->session = Session::getInstance();
-    $this->action = $this->request->getAction();
-    $this->controller = $this->request->getController();
+    $this->action = $this->Request->getAction();
+    $this->controller = $this->Request->getController();
     $this->doControllerMapping();
-    $this->extra_params = Uri::getExtraParams();
-    $this->language = $this->request->getLanguage();
-    $this->app = $this->request->getApp();
+    $this->extra_params = $this->Request->getExtraParams();
+    $this->language = $this->Request->getLanguage();
+    $this->app = $this->Request->getApp();
   }
   
   public function redirect($params,$http_response_code = false){
