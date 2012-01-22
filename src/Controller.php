@@ -29,6 +29,9 @@ class Controller{
   }
   
   public function redirect($params,$http_response_code = false){
+    if($params['controller'] == '')
+      $params['controller'] = $this->controller;
+      
     Uri::redirect($params,$http_response_code);
   }
   
