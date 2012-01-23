@@ -187,9 +187,9 @@ class Router{
     
   private function readMappings(){
     if($this->caching === true){
-      if(!($this->Mappings = $this->ApcCache->getData('mapping_yml'))){
+      if(!($this->Mappings = $this->ApcCache->getData('mapping_yml_'.$this->Request->getAppName()))){
         $this->readMappingsFromFile();
-        $this->ApcCache->setData('mapping_yml',$this->Mappings);
+        $this->ApcCache->setData('mapping_yml_'.$this->Request->getAppName(),$this->Mappings);
       }            
     }else{
       $this->readMappingsFromFile();
