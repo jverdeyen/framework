@@ -6,7 +6,7 @@
    depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdoc,phpunit,phpcb"/>
 -->
 
- <target name="build" depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpcb"/>
+ <target name="build" depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpcb,phpunit"/>
      
  <target name="build-parallel"
    depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
