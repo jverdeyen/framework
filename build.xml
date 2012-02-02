@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="framework" default="build">
+  <!--
  <target name="build"
    depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdoc,phpunit,phpcb"/>
+-->
 
+ <target name="build" depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpcb"/>
+     
  <target name="build-parallel"
    depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
 
