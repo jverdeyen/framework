@@ -1,2 +1,6 @@
 build/coverage/
 build/logs/
+.sonar/
+build/code-browser/
+build/pdepend/
+cache.properties
