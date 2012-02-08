@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="framework" default="build">
+<project name="framework" default="build" basedir=".">
   <!--
  <target name="build"
    depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdoc,phpunit,phpcb"/>
@@ -35,12 +35,19 @@
     <property name="sonar.jdbc.driverClassName" value="com.mysql.jdbc.Driver" />
     <property name="sonar.jdbc.username" value="root" />
     <property name="sonar.jdbc.password" value="860916" />
- 
+    <property name="sonar.host.url" value="http://localhost:9999" />
+    
   <target name="sonar">
     <!-- list of mandatories Sonar properties -->
-    <property name="sonar.sources" value="${basedir}/src" />
+    <property name="sonar.projectName" value="PHP Framework" />
+    <property name="sonar.sources" value="src" />
+    <property name="sonar.tests" value="tests" />
+    <property name="sonar.language" value="php" />
+    <property name="sonar.phpUnit.analyze.test.directory" value="false" />
+    <!-- <property name="sonar.scm.url" value="scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test" /> -->
+    <sonar:sonar key="fr.hashcode:framework" version="1.0" xmlns:sonar="antlib:org.sonar.ant"/>
   </target>
-
+  
  <target name="clean" description="Cleanup build artifacts">
   <delete dir="${basedir}/build/api"/>
   <delete dir="${basedir}/build/code-browser"/>
