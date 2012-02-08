@@ -25,6 +25,15 @@
   </parallel>
  </target>
 
+  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+    <classpath path="/usr/share/sonar/lib/sonar-ant-task-1.3.jar" />
+  </taskdef>
+ 
+  <target name="sonar">
+    <!-- list of mandatories Sonar properties -->
+    <property name="sonar.sources" value="${basedir}/src" />
+  </target>
+
  <target name="clean" description="Cleanup build artifacts">
   <delete dir="${basedir}/build/api"/>
   <delete dir="${basedir}/build/code-browser"/>
