@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="framework" default="build" basedir=".">
+  <property name="source" value="${basedir}/src/}"/>
   <!--
  <target name="build"
    depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdoc,phpunit,phpcb"/>
@@ -43,6 +44,7 @@
     <property name="sonar.sources" value="src" />
     <property name="sonar.tests" value="tests" />
     <property name="sonar.language" value="php" />
+    <property name="sonar.exclusions" value="/vendor/Assetic" />
     <property name="sonar.phpUnit.analyze.test.directory" value="false" />
     <!-- <property name="sonar.scm.url" value="scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test" /> -->
     <sonar:sonar key="fr.hashcode:framework" version="1.0" xmlns:sonar="antlib:org.sonar.ant"/>
@@ -85,6 +87,8 @@
   <exec executable="phploc">
    <arg value="--log-csv" />
    <arg value="${basedir}/build/logs/phploc.csv" />
+   <arg value="--exclude"/>
+   <arg value="${source}/vendor/Assetic/"/>
    <arg path="${basedir}/src" />
   </exec>
  </target>
@@ -95,6 +99,7 @@
    <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
    <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
    <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
+   <arg value="--ignore=${source}/vendor/Assetic/" />
    <arg path="${basedir}/src" />
   </exec>
  </target>
@@ -141,6 +146,8 @@
   <exec executable="phpcpd">
    <arg value="--log-pmd" />
    <arg value="${basedir}/build/logs/pmd-cpd.xml" />
+   <arg value="--exclude"/>
+   <arg value="${source}/vendor/Assetic/"/>
    <arg path="${basedir}/src" />
   </exec>
  </target>
