@@ -10,7 +10,7 @@ class Service{
   protected $extra_params;
   
   public function __construct(){
-    $this->request = Request::getInstance();
+    $this->Request = Request::getInstance();
     $this->controller = $this->getRequest()->getController();
     $this->action = $this->getRequest()->getAction();
     $this->language = $this->getRequest()->getLanguage();

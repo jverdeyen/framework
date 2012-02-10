@@ -8,11 +8,11 @@ class ViewHelper{
   protected $template;
 
   public function __construct(){
-    $this->request = Request::getInstance();
-    $this->controller = $this->request->getController();
-    $this->action = $this->request->getAction();
-    $this->language = $this->request->getLanguage();
-    $this->app = $this->request->getApp();
+    $this->Request = Request::getInstance();
+    $this->controller = $this->Request->getController();
+    $this->action = $this->Request->getAction();
+    $this->language = $this->Request->getLanguage();
+    $this->app = $this->Request->getApp();
 
     $this->template = new Template($this->app['template_dir']);
     $this->setDefaultFile();
