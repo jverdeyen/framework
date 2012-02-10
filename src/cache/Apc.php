@@ -3,7 +3,7 @@ namespace Framework\Cache;
 
 class Apc {
 
-    private static $iTtl = 600;
+    private static $iTtl = 127800;
     private static $bEnabled = false;
 
     // constructor
