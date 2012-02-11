@@ -14,7 +14,7 @@ class Config{
       return self::$databases[$type];
     
     if(file_exists($yaml_config))
-      $databases = \sfYaml::load(ROOT_DIR.'config/database.yml');
+      $databases = \Symfony\Component\Yaml\Yaml::parse(ROOT_DIR.'config/database.yml');
     else    
       $databases = unserialize(DATABASE);
       

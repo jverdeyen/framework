@@ -12,27 +12,27 @@ class Autoloader {
     spl_autoload_register(array($this, 'autoload'));
     
     # pear install twig/twig
-    require_once 'Twig/Autoloader.php';
-    \Twig_Autoloader::register();
+    //require_once 'Twig/Autoloader.php';
+    //\Twig_Autoloader::register();
     
     require_once dirname(__FILE__).'/../vendor/Twig/Extensions/Autoloader.php';
     \Twig_Extensions_Autoloader::register();
     
-    require_once dirname(__FILE__).'/Assetic.php';
-    Assetic::register();
+    //require_once dirname(__FILE__).'/Assetic.php';
+    //Assetic::register();
     
     # pear install symfony/YAML
-    require_once 'SymfonyComponents/YAML/sfYaml.php';
+    //require_once 'SymfonyComponents/YAML/sfYaml.php';
     
     # sudo pear install pear.doctrine-project.org/DoctrineCommon-2.1.0
     # sudo pear install pear.doctrine-project.org/DoctrineDBAL-2.1.0
     # sudo pear install pear.doctrine-project.org/DoctrineORM-2.1.0
-    require_once 'Doctrine/Common/ClassLoader.php';
-    $classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
-    $classLoader->register();
+    //require_once 'Doctrine/Common/ClassLoader.php';
+    //$classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
+    //$classLoader->register();
     
-    $classLoader = new \Doctrine\Common\ClassLoader('Symfony', 'Doctrine');
-    $classLoader->register();
+    //$classLoader = new \Doctrine\Common\ClassLoader('Symfony', 'Doctrine');
+    //$classLoader->register();
     
     #sudo pear install swift/swift
     //require_once 'swift_required.php';
@@ -50,7 +50,7 @@ class Autoloader {
     $this->namespaces[strtoupper($namespace)] = $dir;
   }
   
-  private function autoload($class) {
+  public function autoload($class) {
     // Enkel registerd namespaces laden
     $temp = $class;
     $class = explode('\\',$class);    

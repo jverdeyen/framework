@@ -7,19 +7,23 @@ class Bootstrap{
   public static function start($options = array()){
     
     try{
-      @include_once dirname(__FILE__).'/../../config/config.php';
-      @include_once dirname(__FILE__).'/../../include/global_vars.php';
-      @include_once dirname(__FILE__).'/../../config/db.php';
+     
       include_once dirname(__FILE__).'/autoloader/Autoloader.php';
       
-      Autoloader\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__).'/');
-      Bootstrap::checkBootstrap();
+      //require 'vendor/.composer/autoload.php';
+      
+      
+      //Autoloader\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__).'/');
+      
       Autoloader\Autoloader::getInstance()->registerNamespace(APP_NAME,ROOT_DIR.'./');
       
+      
+      Bootstrap::checkBootstrap();
       Logger::getInstance()->setErrorHandlers();
       echo FrontController::getInstance()->route($options);
 
-    }catch(ControllerNotFoundException $e){
+    }
+    /*catch(ControllerNotFoundException $e){
       // Last resort catching
       if(self::runningInDev()){
         echo Logger::getInstance()->exceptionHandler($e);
@@ -42,7 +46,8 @@ class Bootstrap{
       }
       Uri::redirect(array('controller' => 'index'),301);
       
-    }catch(\Exception $e){
+    }*/
+    catch(\Exception $e){
       if(self::runningInDev()){
         echo Logger::getInstance()->exceptionHandler($e);
         exit;

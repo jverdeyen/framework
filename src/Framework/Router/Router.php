@@ -200,7 +200,7 @@ class Router{
     if(!file_exists($this->mapping_file))
       return false;
       
-    $mapping = \sfYaml::load($this->mapping_file);
+    $mapping = \Symfony\Component\Yaml\Yaml::parse($this->mapping_file);
     $mapping = $mapping[$this->Request->getAppName()];
     if(!is_array($mapping))
       return false;
