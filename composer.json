@@ -1,0 +1,22 @@
+{
+    "name": "jverdeyen/framework",
+    "version": "0.9.1",
+    "description": "Lightweight App Framework for PHP 5.3",
+    "keywords": ["framework", "application", "micro"],
+    "homepage": "https://github.com/jverdeyen/framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joeri Verdeyen",
+            "email": "joeriverdeyen@gmail.com",
+            "homepage": "http://jverdeyen.be/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-0": { "Framework": "src/" }
+    }
+}
