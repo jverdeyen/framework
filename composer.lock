@@ -1,0 +1,9 @@
+{
+    "hash": "77187f24d0349c4bd8fe33c81a6b9da8",
+    "packages": [
+        {
+            "package": "symfony\/class-loader",
+            "version": "2.1.0-dev"
+        }
+    ]
+}

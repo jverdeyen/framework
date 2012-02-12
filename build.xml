@@ -44,7 +44,7 @@
     <property name="sonar.sources" value="src" />
     <property name="sonar.tests" value="tests" />
     <property name="sonar.language" value="php" />
-    <property name="sonar.exclusions" value="vendor/Assetic/**" />
+    <property name="sonar.exclusions" value="vendor/**" />
     <property name="sonar.phpUnit.analyze.test.directory" value="false" />
     <!-- <property name="sonar.scm.url" value="scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test" /> -->
     <sonar:sonar key="fr.hashcode:framework" version="1.0" xmlns:sonar="antlib:org.sonar.ant"/>
@@ -88,7 +88,7 @@
    <arg value="--log-csv" />
    <arg value="${basedir}/build/logs/phploc.csv" />
    <arg value="--exclude"/>
-   <arg value="${source}/vendor/Assetic/"/>
+   <arg value="${source}/vendor/"/>
    <arg path="${basedir}/src" />
   </exec>
  </target>
@@ -99,7 +99,7 @@
    <arg value="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
    <arg value="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
    <arg value="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
-   <arg value="--ignore=${source}/vendor/Assetic/" />
+   <arg value="--ignore=${source}/vendor/" />
    <arg path="${basedir}/src" />
   </exec>
  </target>
@@ -109,7 +109,7 @@
   <exec executable="phpmd">
    <arg path="${basedir}/src" />
    <arg value="text" />
-   <arg value="${basedir}/build/phpmd.xml" />
+   <arg value="${basedir}/phpmd.xml" />
   </exec>
  </target>
 
@@ -118,7 +118,7 @@
   <exec executable="phpmd">
    <arg path="${basedir}/src" />
    <arg value="xml" />
-   <arg value="${basedir}/build/phpmd.xml" />
+   <arg value="${basedir}/phpmd.xml" />
    <arg value="--reportfile" />
    <arg value="${basedir}/build/logs/pmd.xml" />
   </exec>
@@ -127,7 +127,7 @@
  <target name="phpcs"
          description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
   <exec executable="phpcs">
-   <arg value="--standard=${basedir}/build/phpcs.xml" />
+   <arg value="--standard=${basedir}/phpcs.xml" />
    <arg path="${basedir}/src" />
   </exec>
  </target>
@@ -137,7 +137,7 @@
   <exec executable="phpcs" output="/dev/null">
    <arg value="--report=checkstyle" />
    <arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
-   <arg value="--standard=${basedir}/build/phpcs.xml" />
+   <arg value="--standard=${basedir}/phpcs.xml" />
    <arg path="${basedir}/src" />
   </exec>
  </target>
@@ -147,7 +147,7 @@
    <arg value="--log-pmd" />
    <arg value="${basedir}/build/logs/pmd-cpd.xml" />
    <arg value="--exclude"/>
-   <arg value="${source}/vendor/Assetic/"/>
+   <arg value="${source}/vendor/"/>
    <arg path="${basedir}/src" />
   </exec>
  </target>
