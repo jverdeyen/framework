@@ -15,7 +15,7 @@ class Bootstrap{
       
       //Autoloader\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__).'/');
       
-      Autoloader\Autoloader::getInstance()->registerNamespace(APP_NAME,ROOT_DIR.'./');
+      //Autoloader\Autoloader::getInstance()->registerNamespace(APP_NAME,ROOT_DIR.'./');
       
       
       Bootstrap::checkBootstrap();
