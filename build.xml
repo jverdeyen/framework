@@ -47,7 +47,7 @@
     <property name="sonar.exclusions" value="vendor/**" />
     <property name="sonar.phpUnit.analyze.test.directory" value="false" />
     <!-- <property name="sonar.scm.url" value="scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test" /> -->
-    <sonar:sonar key="nl.php:framework" version="1.0" xmlns:sonar="antlib:org.sonar.ant"/>
+    <sonar:sonar key="fr.hashcode:framework" version="1.0" xmlns:sonar="antlib:org.sonar.ant"/>
   </target>
   
  <target name="clean" description="Cleanup build artifacts">

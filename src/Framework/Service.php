@@ -10,7 +10,7 @@ class Service{
   protected $extra_params;
   
   public function __construct(){
-    $this->Request = Request::getInstance();
+    $this->Request = new Request();
     $this->controller = $this->getRequest()->getController();
     $this->action = $this->getRequest()->getAction();
     $this->language = $this->getRequest()->getLanguage();
@@ -21,14 +21,16 @@ class Service{
   public function getAction() { return $this->getRequest()->getAction(); } 
   public function getLanguage() { return $this->getRequest()->getLanguage(); } 
   public function getRequest() { return Request::getInstance(); } 
-  public function getExtraParams() { return Uri::getExtraParams(); } 
+  public function getExtraParams() { return $this->getRequest()->getExtraParams(); } 
   
   public function redirect($params,$http_response_code = false){
-    Uri::redirect($params,$http_response_code);
+    $Uri = new Uri($this->Request);
+    $Uri->redirect($params,$http_response_code);
   }
   
   public function getUrl($params,$app = false,$cleanup = true){
-    return Uri::getUrl($params,$app,$cleanup);
+    $Uri = new Uri($this->Request);
+    return $Uri->getUrl($params,$app,$cleanup);
   }
 
 }

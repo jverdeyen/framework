@@ -21,22 +21,15 @@ class Mapping{
     if($data['action'] != null)
       $this->action = $data['action'];
     
-    if($data['app'] != null)
+    if($data['app'] != null){
       $this->app = $data['app'];
-    else
-      $this->app = \Framework\Request::getInstance()->getAppName();
+    }
     
     if($data['extra'] != null)
-      $this->extra = $data['extra'];
-      
-    // find all slugs and fill them in (except reserved words?)
-    $this->fillUpSlugsInExtra();
-    $this->fillUpMatches();
-      
-    
+      $this->extra = $data['extra'];       
   }
   
-  private function fillUpSlugsInExtra(){
+  public function fillUpSlugsInExtra(){
     $pattern_array = $this->getPatternArray();
     foreach($pattern_array as $slug){
       if(preg_match('/^{[a-zA-Z0-9_-]+}$/', $slug)){
@@ -51,9 +44,9 @@ class Mapping{
     }
   }
   
-  private function fillUpMatches(){
+  public function fillUpMatches($reserved_words = array()){
     foreach($this->extra as $key => $value){
-      if(in_array($key,Router::getReservedWords()))
+      if(in_array($key,$reserved_words))
         continue;
         
       if($this->extra[$key]['match'] == ''){
@@ -73,12 +66,12 @@ class Mapping{
 		return $array;
   }
   
-  public function getExtraRegex($key){
+  public function getExtraRegex($key,$reserved_words){
     if(trim($this->extra[$key]['match']) != ''){
       return $this->extra[$key]['match'];
     }
     
-    if(in_array($key,Router::getReservedWords())){
+    if(in_array($key,$reserved_words)){
       if($key == "controller")
         return $this->getController();
     }
@@ -100,9 +93,9 @@ class Mapping{
   }
   
   
-  public function getExtraArray(){
+  public function getExtraArray(Request $Request){
     $array = array();
-    $uri_parts = \Framework\Uri::getInstance()->getParams();
+    $uri_parts = $Request->getParams();
 
     foreach($this->extra as $key => $value){
       // find the matching value in the url, it has to be a slug

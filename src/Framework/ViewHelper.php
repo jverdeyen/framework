@@ -41,7 +41,8 @@ class ViewHelper{
   }
   
   public function getUrl($params,$app = false,$cleanup = true){
-    return Uri::getUrl($params,$app,$cleanup);
+    $Uri = new Uri($this->Request);
+    return $Uri->getUrl($params,$app,$cleanup);
   }
   
   public function preDispatch(){}

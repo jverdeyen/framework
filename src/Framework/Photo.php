@@ -31,7 +31,7 @@ class Photo {
       $filename = $this->filename;
    
     if($this->image === false){
-      
+
       if(!file_exists($filename))
         throw new FilenameNotFoundException('File could not be found: '.$filename);
         

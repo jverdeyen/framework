@@ -10,88 +10,55 @@ class FrontController{
   protected $_app;
   protected $Request;
   
-  private $_options;
   private $Router;
   
-  public static $_instance;
-  
-  
-  public static function getInstance(){
-		if( !(self::$_instance instanceof self))
-			self::$_instance = new self();
-		return self::$_instance;
-	}
 	
-	private function __construct(){
+	public function __construct(Request $Request){
 	  Session::start();
 	  
 	  $caching = true;
 	  if(ENVIRONMENT == 'dev')
 	    $caching = false;
-	    
-	  $this->Router = Router\Router::getInstance($caching);
-	  $this->Request = Request::getInstance();
-
-
+	  
+	  $this->Request = $Request;
+	  $this->Router = new Router\Router($Request);
+	  $this->Router->setCaching(new \Framework\Cache\Apc());
+	  
 	  $this->Router->route();
+	  
 	  $this->_app = $this->Request->getApp();
     $this->_controller  = $this->Request->getController();
     $this->_action  = $this->Request->getAction();
     $this->_language  = $this->Request->getLanguage();
-	//  var_dump($this->Request);
-	  
-	  
 	  
 	  setlocale(LC_ALL, $this->_language."_".strtoupper($this->_language).'.utf8');
 
     if(!$this->Router->foundMapping()){
       if( MULTI_LANGUAGE !== false ){
         if($this->_app['clean_url'] === true)
-    	    self::redirectUrlMultiLang();
+    	    $this->redirectUrlMultiLang();
       }else{
         if($this->_app['clean_url'] === true)
-    	    self::redirectUrlSingleLang();
+    	    $this->redirectUrlSingleLang();
       }
     }
-  
+    
 	}
 	
-	private function setOptions($options){
-	  if(!is_array($options))
-	    return false;
-	  
-	  $this->_options = $options;
-	}
-	
-	// This will be deprecated.. due to the new mapping
-	private function doControllerMapping(){
-	  // kijk naar een andere mapping voor de controller
-	  if(is_array($this->_options['controller_mapping'])){
-	    if(array_key_exists(strtolower($this->_controller),$this->_options['controller_mapping'])){
-	      $controller = $this->_options['controller_mapping'][strtolower($this->_controller)];
-	      return ucfirst(strtolower($controller));
-	    } 
-	  }
-	  return ucfirst(strtolower($this->_controller));   	  
-	}
-	
-	
-	public function route($options){
-	  $this->setOptions($options);
+	public function route(){
+	  $controller_name = "\\".APP_NAME."\\App\\".ucfirst($this->_app['name'])."\\Controller\\".ucfirst(strtolower($this->_controller));
 
-	  $controller_name = "\\".APP_NAME."\\App\\".ucfirst($this->_app['name'])."\\Controller\\".$this->doControllerMapping();
 	  if(class_exists($controller_name)){
-	    $controller = new $controller_name($this->_options);
+	    $controller = new $controller_name($this->Request);
 	    return $controller->init();
 	  }   
+	  
 	  throw new ControllerNotFoundException("Controller $controller_name could not be found.");
 	}
 	
-	private function redirectUrlSingleLang(){
-	  $uri =  Uri::getInstance();
-    
+	private function redirectUrlSingleLang(){    
     // zijn er meer dan 2 parameters (extra), doe dan zeker geen redirect (toch niet mogelijk)
-    if($uri->getParam(2)) return false;
+    if($this->Request->getParam(2)) return false;
 
     $param = array();
     $param[0] = $this->_controller;
@@ -108,10 +75,9 @@ class FrontController{
 	}
 	
 	private function redirectUrlMultiLang(){
-    $uri =  Uri::getInstance();
     
     // zijn er meer dan 3 parameters (extra), doe dan zeker geen redirect (toch niet mogelijk)
-    if($uri->getParam(3)) return false;
+    if($this->Request->getParam(3)) return false;
     
     
     $param = array();
@@ -128,7 +94,7 @@ class FrontController{
     
     if(!in_array($this->_language,unserialize(LANGUAGES))){
       // als de de taal niet bestaat, redirect dan met een 301 naar de default language
-      Request::getInstance()->setLanguage(DEFAULT_LANGUAGE);
+      $this->Request->setLanguage(DEFAULT_LANGUAGE);
       Uri::redirect(array('controller' => 'index'),301);
       $param[0] = DEFAULT_LANGUAGE;
     }

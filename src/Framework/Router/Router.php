@@ -6,31 +6,30 @@ class Router{
   private $Request = null;
   private $Mappings = array();
   private $MatchedMapping = false;
-  private $ApcCache = false;
-  private $caching = true;
+  private $Caching = false;
   private static $reserved_words = array('controller','language','action','app');
   private static $instance = null;
   
   private $mapping_file;
   
-  public function __construct($caching = true){
-    $this->caching = $caching;
-    $this->mapping_file = ROOT_DIR.'include/mapping.yml';
-    $this->Request = \Framework\Request::getInstance();
-    $this->ApcCache = new \Framework\Cache\Apc();
-    $this->readMappings();
+  public function __construct(Request $Request,$mapping_file = false){
+    if($mapping_file === false)
+      $mapping_file = ROOT_DIR.'include/mapping.yml';
+      
+    $this->mapping_file = $mapping_file;
+    $this->Request = $Request;
   }
   
-  public static function getInstance($caching = true){
-    if(!isset(self::$instance))
-      self::$instance = new self($caching);
-    return self::$instance;
+  public function setCaching($Caching){
+    $this->Caching = $Caching;
   }
   
   /**
    * Converts the request object into a matching mapping
    */
   public function route(){
+    $this->readMappings();
+  
     if(!$this->isEnabled())
       return false;
     
@@ -41,12 +40,12 @@ class Router{
       $this->Request->setController($Mapping->getController());
       $this->Request->setAction($Mapping->getAction());
       $this->Request->setApp($Mapping->getApp());
-      $this->Request->setExtraParams($Mapping->getExtraArray());
+      $this->Request->setExtraParams($this->Request);
     }
   }
   
   public function findAUrlMapping($uri){
-    
+    $this->readMappings();
     foreach($this->Mappings as $Mapping){
       $result = $this->checkMatchFromUrl($Mapping,$uri);
       if($result != false){
@@ -61,13 +60,15 @@ class Router{
   }
   
   private function findAMapping($uri = false){
-    if($uri === false)
-      $uri = \Framework\Uri::getInstance()->getParams();
+    if($uri === false){
+      $Uri = new  \Framework\Uri($this->Request);
+      $uri = $Uri->getParams();
+    }
       
     $uri_key = 'router_mapping_'.md5(implode('.',$uri).$this->Request->getAppName());
     
-    if($this->caching != false){
-      if($Mapping = $this->ApcCache->getData($uri_key)){
+    if($this->Caching != false){
+      if($Mapping = $this->Caching->getData($uri_key)){
         return $Mapping;
       }
     }
@@ -75,8 +76,8 @@ class Router{
     
     foreach($this->Mappings as $Mapping){
       if($MappingChecked = $this->checkMatch(clone $Mapping,$uri)){
-        if($this->caching != false){
-          $this->ApcCache->setData($uri_key,$Mapping);
+        if($this->Caching != false){
+          $this->Caching->setData($uri_key,$Mapping);
         }
         return $MappingChecked;
       }
@@ -118,7 +119,7 @@ class Router{
     $replace = array();
     $replace_by = array(); 
     foreach($extras as $key => $value){  
-      $regex = $Mapping->getExtraRegex($key);
+      $regex = $Mapping->getExtraRegex($key,$this->reserved_words);
      
       if($regex == '*' || preg_match($regex,$url[$index])){
         $replace[] = '{'.$key.'}';
@@ -153,7 +154,7 @@ class Router{
         // haal de reguliere expressie op voor dit specifiek item
         $reserved_words = self::getReservedWords();
         $slug_key = substr($slug, 1, -1);
-        $regex = $Mapping->getExtraRegex($slug_key);
+        $regex = $Mapping->getExtraRegex($slug_key,$this->reserved_words);
 
         // dit kan een reserved word zijn, kijk dan of de reguliere expressie hiermee klopt (of eender wat kan/mag zijn)
         if(in_array($slug_key,$reserved_words)){
@@ -185,34 +186,41 @@ class Router{
     
   }
     
-  private function readMappings(){
-    if($this->caching === true){
-      if(!($this->Mappings = $this->ApcCache->getData('mapping_yml_'.$this->Request->getAppName()))){
+  private function readMappings()
+  {
+    if($this->Caching != false){
+      if(!($this->Mappings = $this->Caching->getData('mapping_yml_'.$this->Request->getAppName()))){
         $this->readMappingsFromFile();
-        $this->ApcCache->setData('mapping_yml_'.$this->Request->getAppName(),$this->Mappings);
+        $this->Caching->setData('mapping_yml_'.$this->Request->getAppName(),$this->Mappings);
       }            
-    }else{
+    } else {
       $this->readMappingsFromFile();
     }    
   }
   
-  private function readMappingsFromFile(){
+  private function readMappingsFromFile()
+  {
     if(!file_exists($this->mapping_file))
       return false;
       
     $mapping = \Symfony\Component\Yaml\Yaml::parse($this->mapping_file);
     $mapping = $mapping[$this->Request->getAppName()];
+
     if(!is_array($mapping))
       return false;
 
-    foreach($mapping as $key => $value){
-      $this->Mappings[] = new Mapping($key,$value);
+    foreach($mapping as $key => $value){  
+      $Mapping = new Mapping($key,$value);
+      $Mapping->fillUpSlugsInExtra();
+      $Mapping->fillUpMatches(self::getReservedWords());
+      $this->Mappings[] = $Mapping;
     }
     
     return $this->Mapping;
   }
   
-  public function getReservedWords(){
+  public static function getReservedWords()
+  {
     return self::$reserved_words;
   }
 
@@ -226,8 +234,5 @@ class Router{
     return false;
   }
   
-  public function setCaching($x){
-    $this->caching = $x;
-  }
 }
 ?>

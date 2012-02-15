@@ -5,22 +5,23 @@ class Request {
  
   private static $_instance = null;
  
-  private $_controller;
-  private $_action;
-  private $_language;
-  private $_app;
-  private $_app_name;
+  private $controller;
+  private $action;
+  private $language;
+  private $app;
+  private $app_name;
   private $extra_params;
+  private $params;
   
   public function __construct(){
-    $uri = Uri::getInstance();
    
-    $this->_app = self::getApp();
-    $this->_app_name = self::getAppName();
-    $this->extra_params = Uri::getInstance()->getExtraParams();
-    self::initController();
-    self::initAction();
-    self::initLanguage();
+    $this->app = $this->getApp();
+    $this->app_name = $this->getAppName();
+    $this->initParams();
+    $this->initExtraParams();
+    $this->initController();
+    $this->initAction();
+    $this->initLanguage();
 
   }
  
@@ -32,106 +33,103 @@ class Request {
   
   private function initController(){
     if(MULTI_LANGUAGE === false){
-	    if(!$this->_controller = Uri::getInstance()->getParam(0))
-  	    $this->_controller = DEFAULT_CONTROLLER;
+	    if(!$this->controller = $this->getParam(0))
+  	    $this->controller = DEFAULT_CONTROLLER;
 	  }else{
-	    if(!$this->_controller = Uri::getInstance()->getParam(1))
-  	    $this->_controller = DEFAULT_CONTROLLER;
+	    if(!$this->controller = $this->getParam(1))
+  	    $this->controller = DEFAULT_CONTROLLER;
 	  }
   }
   
   private function initAction(){
     if(MULTI_LANGUAGE === false){
-	    if(!$this->_action = Uri::getInstance()->getParam(1))
-  	    $this->_action = DEFAULT_ACTION;
+	    if(!$this->action = $this->getParam(1))
+  	    $this->action = DEFAULT_ACTION;
 	  }else{
-	    if(!$this->_action = Uri::getInstance()->getParam(2))
-  	    $this->_action = DEFAULT_ACTION;
+	    if(!$this->action = $this->getParam(2))
+  	    $this->action = DEFAULT_ACTION;
 	  }
   }
   
   private function initLanguage(){
     if(MULTI_LANGUAGE === false){
-	    $this->_language = DEFAULT_LANGUAGE;
+	    $this->language = DEFAULT_LANGUAGE;
       return true;
     }
 	  
 	  $browser_lang = Localization::getBrowserLanguage();
 
-	  if(Uri::getInstance()->getParam(0)){
+	  if($this->getParam(0)){
 	     // check in de url
-	    $this->_language = Uri::getInstance()->getParam(0);
+	    $this->language = $this->getParam(0);
 	  }elseif(self::getCookie($this->getAppLanguageCookieName())){ 
 	    // check de cookie
-	    $this->_language = self::getCookie($this->getAppLanguageCookieName());
+	    $this->language = self::getCookie($this->getAppLanguageCookieName());
 	  }elseif($browser_lang){
 	    // check de browser language
-	    $this->_language = $browser_lang;
+	    $this->language = $browser_lang;
 	  }else{
-	    $this->_language = DEFAULT_LANGUAGE;
+	    $this->language = DEFAULT_LANGUAGE;
 	    // toon default
 	  }
 	  
-	  if(in_array($this->_language,unserialize(LANGUAGES)))
-      self::setCookie($this->getAppLanguageCookieName(),$this->_language);
+	  if(in_array($this->language,unserialize(LANGUAGES)))
+      self::setCookie($this->getAppLanguageCookieName(),$this->language);
   }
   
-  public function getParam($i){
-    return Uri::getInstance()->getParam($i);
-  }
-  
-  public function getExtraParams(){
-    return $this->extra_params;
-  }
-  
-  public function setExtraParams($x){
-    return $this->extra_params = $x;
-  }
- 
-  public function getController(){
-    return $this->_controller;
-  }
-  
-  public function setController($x){
-    return $this->_controller = $x;
-  }
- 
-  public function getAction(){
-    return $this->_action;
-  }
-  
-  public function setAction($x){
-    return $this->_action = $x;
-  }
-  public function getLanguage(){
-    return $this->_language;
-  }
-  
-  public function setLanguage($language){
-    $this->_language = $language;
-  }
+  private function initExtraParams(){
+    $params = $this->getParams();
+	  $total = count($params);
+	  if(MULTI_LANGUAGE === false){
+	    if($total > 2) 
+	      $this->extra_params = array_slice($params, 2, $total-1);
+	    
+    }else{
+	    if($total > 3) 
+	      $this->extra_params = array_slice($params, 3, $total-2);
+    }
+	}
+	
+	private function initParams(){
+	  $params =  explode('/', $_SERVER['QUERY_STRING']);
+  	if(end($params) == ''){
+  	  array_pop($params);
+  	}
+  	$this->params = $params;
+	}
+
+  public function getParam($i){ return $this->param[$i]; }
+  public function getParams(){ return $this->params; }
+  public function getExtraParams(){ return $this->extra_params; }
+  public function setExtraParams($x){ $this->extra_params = $x;}
+  public function getController(){return $this->controller;}
+  public function setController($x){return $this->controller = $x;}
+  public function getAction(){return $this->action;}  
+  public function setAction($x){return $this->action = $x; }
+  public function getLanguage(){return $this->language; }
+  public function setLanguage($language){$this->language = $language;}
  
   public function getApp(){
 
-    if(!isset($this->_app)){
+    if(!isset($this->app)){
       list($subdomain, $rest) = explode('.', $this->getServer('SERVER_NAME'), 2);
       $apps = unserialize(APPS);
       
       foreach($apps as $key => $app){
         if( strpos($subdomain,$key) !== false){
-          $this->_app = $app;
+          $this->app = $app;
           break;
         }
       }   
       
-      if(!is_array($this->_app))
-        $this->_app = $apps['default'];
+      if(!is_array($this->app))
+        $this->app = $apps['default'];
       
-      if(!is_array($this->_app))
+      if(!is_array($this->app))
         throw new \Exception('No default Application name defined!');
       
    }
-   return $this->_app;
+   return $this->app;
   }
   
   public function setApp($name){
@@ -204,7 +202,7 @@ class Request {
    
    public function setPost($name,$value){
      $_POST[$name] = $value;
-    }
+   }
  
    public function unsetPost($name) {
      unset($_POST[$name]);
@@ -213,6 +211,7 @@ class Request {
    public function setGet($name,$value){
      $_GET[$name] = $value;
    }
+  
    public function getGet($name) {
      return stripslashes($_GET[$name]);
    }

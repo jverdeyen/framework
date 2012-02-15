@@ -3,21 +3,12 @@ namespace Framework;
 
 class Uri{
 
+  public $Request;
 	public static $params = array();
-	private static $instance = null;
 
-	public static function getInstance(){
- 		if(is_null(self::$instance))
- 			self::$instance = new uri;
-		return self::$instance;
-	}
-
-
-	private function __construct(){
-		self::$params =  explode('/', $_SERVER['QUERY_STRING']);
-		if(end(self::$params) == ''){
-		  array_pop(self::$params);
-		}
+	public function __construct(Request $Request){
+	  self::$params = $Request->getParams();		
+		$this->Request = $Request;
 	}
 	
 	
@@ -44,7 +35,7 @@ class Uri{
     }
 	}
 	
-	private static function constructUrl($params,$url,$app_name){
+	private function constructUrl($params,$url,$app_name){
 	  if(is_array($params['extra'])){
 	    $i = 3;
 	    foreach($params['extra'] as $key => $value){
@@ -59,7 +50,7 @@ class Uri{
     
     foreach($apps as $key => $app){
       if($app_name === false){
-        if( strtolower(Request::getInstance()->getAppName()) == strtolower($app['name']))
+        if( strtolower($this->Request->getAppName()) == strtolower($app['name']))
           break;
       }else{
         if( strtolower($app_name) == strtolower($app['name']))
@@ -68,7 +59,7 @@ class Uri{
       
     }
 
-    $Router = \Framework\Router\Router::getInstance();
+    $Router = new \Framework\Router\Router($this->Request);
     $url_parts = $Router->findAUrlMapping($url);
     
     if($url_parts != false)
@@ -86,9 +77,7 @@ class Uri{
     return $url;
 	}
 	
-	private static function getUrlSingleLanguage($params,$app_name = false,$cleanup = true){
-	  $request = Request::getInstance();
-	  
+	private function getUrlSingleLanguage($params,$app_name = false,$cleanup = true){	  
     $url = array();
 	  $url[0] = 'index'; // controller
 	  $url[1] = 'index'; // action
@@ -105,13 +94,11 @@ class Uri{
         unset($url[0]);
       }  
     }
-	  
-	  return self::constructUrl($params,$url,$app_name);
+	  return $this->constructUrl($params,$url,$app_name);
 	}
 	
-	private static function getUrlMultiLanguage($params,$app_name = false,$cleanup = true){
-	  $request = Request::getInstance();
-	  $language = $request->getLanguage();
+	private function getUrlMultiLanguage($params,$app_name = false,$cleanup = true){
+	  $language = $this->Request->getLanguage();
 	  
     $url = array();
     $url[0] = isset( $language ) ? $language : DEFAULT_LANGUAGE; // language
@@ -133,18 +120,18 @@ class Uri{
       }  
     }
 	  
-	  return self::constructUrl($params,$url,$app_name);
+	  return $this->constructUrl($params,$url,$app_name);
 	}
 	
-	public static function getUrl($params,$app_name = false,$cleanup = true){
+	public function getUrl($params,$app_name = false,$cleanup = true){
 	  if(MULTI_LANGUAGE === false){
-	    return self::getUrlSingleLanguage($params,$app_name,$cleanup);
+	    return $this->getUrlSingleLanguage($params,$app_name,$cleanup);
 	  }
 	  
-	  return self::getUrlMultiLanguage($params,$app_name,$cleanup);
+	  return $this->getUrlMultiLanguage($params,$app_name,$cleanup);
 	}
 	
-	public static function redirect($params,$http_response_code = '302'){
+	public function redirect($params,$http_response_code = '302'){
 	  
 	  if($http_response_code == false)
 	    $http_response_code = '302';

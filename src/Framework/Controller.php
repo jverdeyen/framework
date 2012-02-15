@@ -15,14 +15,12 @@ class Controller{
   
   private $options;
   
-  public function __construct($options = array()){
-    $this->options = $options;
-    $this->Request = Request::getInstance();
+  public function __construct(Request $Request){
+    $this->Request = $Request;
     $this->response = Response::getInstance();
     $this->session = Session::getInstance();
     $this->action = $this->Request->getAction();
     $this->controller = $this->Request->getController();
-    $this->doControllerMapping();
     $this->extra_params = $this->Request->getExtraParams();
     $this->language = $this->Request->getLanguage();
     $this->app = $this->Request->getApp();
@@ -32,33 +30,35 @@ class Controller{
     if($params['controller'] == '')
       $params['controller'] = $this->controller;
       
-    Uri::redirect($params,$http_response_code);
+    $Uri = new Uri($this->Request);
+      
+    $Uri->redirect($params,$http_response_code);
   }
   
   public function getUrl($params,$app = false, $cleanup = true){
+    $Uri = new Uri($this->Request);
+    
     if($params['controller'] == '')
       $params['controller'] = $this->controller;
     
-    return Uri::getUrl($params, $app, $cleanup);
+    return $Uri->getUrl($params, $app, $cleanup);
   }
   
   public function getFlash(){
     return new View\Flash();
   }
       
-  private function doControllerMapping(){
-    if(is_array($this->options['controller_mapping'])){
-	    if(array_key_exists(strtolower($this->controller),$this->options['controller_mapping'])){
-	      $this->controller = $this->options['controller_mapping'][strtolower($this->controller)];
-	    } 
-	  }
-  }
   
-  public function init(){  
+  public function init()
+  {  
     if(is_callable(array($this, $this->action.'Action')))
+    {
       return $this->{$this->action.'Action'}();
-    elseif(is_callable(array($this, 'indexAction')))
+    }      
+    elseif(is_callable(array($this, 'indexAction'))){
       return $this->{'indexAction'}();
+    }
+      
     else
       throw new BadFunctionCallException('Method '.$this->action.'Action is undefined in '.get_class($this));  
   }

@@ -4,23 +4,22 @@ use Framework\Exception\ControllerNotFoundException;
 
 class Bootstrap{
   
-  public static function start($options = array()){
-    
-    try{
-     
-      include_once dirname(__FILE__).'/autoloader/Autoloader.php';
+  public function __construct(Request $Request){
+    $this->Request = $Request;
+  }
+  public function start(){
+
+    try{      
+      require 'vendor/.composer/autoload.php';    
       
-      //require 'vendor/.composer/autoload.php';
+      require_once dirname(__FILE__).'/vendor/Twig/Extensions/Autoloader.php';
+      \Twig_Extensions_Autoloader::register();
       
-      
-      //Autoloader\Autoloader::getInstance()->registerNamespace('Framework',dirname(__FILE__).'/');
-      
-      //Autoloader\Autoloader::getInstance()->registerNamespace(APP_NAME,ROOT_DIR.'./');
-      
-      
-      Bootstrap::checkBootstrap();
+      $this->checkBootstrap();
       Logger::getInstance()->setErrorHandlers();
-      echo FrontController::getInstance()->route($options);
+      
+      $FrontController = new FrontController($this->Request);
+      echo $FrontController->route();
 
     }
     /*catch(ControllerNotFoundException $e){
