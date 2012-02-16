@@ -2,9 +2,7 @@
 namespace Framework;
 
 class Request {
- 
-  private static $_instance = null;
- 
+
   private $controller;
   private $action;
   private $language;
@@ -23,12 +21,6 @@ class Request {
     $this->initAction();
     $this->initLanguage();
 
-  }
- 
-  public static function getInstance(){
-    if(!isset(self::$_instance))
-      self::$_instance = new self();
-    return self::$_instance;
   }
   
   private function initController(){

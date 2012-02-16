@@ -1,9 +1,108 @@
 [
     {
+        "name": "twig\/twig",
+        "version": "1.7.0-dev",
+        "version_normalized": "1.7.0.0-dev",
+        "time": "2012-02-15 08:29:31",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/fabpot\/Twig.git",
+            "reference": "4dee4e5841d1a59862b43ca8ed44a933f41e2024"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/fabpot\/Twig\/zipball\/4dee4e5841d1a59862b43ca8ed44a933f41e2024",
+            "reference": "4dee4e5841d1a59862b43ca8ed44a933f41e2024",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "type": "library",
+        "names": [
+            "twig\/twig"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "BSD"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Armin Ronacher",
+                "email": "armin.ronacher@active-4.com",
+                "homepage": null
+            }
+        ],
+        "description": "Twig, the flexible, fast, and secure template language for PHP",
+        "homepage": "http:\/\/twig.sensiolabs.org",
+        "keywords": [
+            "templating"
+        ],
+        "autoload": {
+            "psr-0": {
+                "Twig_": "lib\/"
+            }
+        }
+    },
+    {
+        "name": "symfony\/yaml",
+        "version": "2.1.0-dev",
+        "version_normalized": "2.1.0.0-dev",
+        "target-dir": "Symfony\/Component\/Yaml",
+        "time": "2012-01-15 22:44:08",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/symfony\/Yaml.git",
+            "reference": "1eaee09e4ac15923594502bc37e769b29eb7101d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/symfony\/Yaml\/zipball\/1eaee09e4ac15923594502bc37e769b29eb7101d",
+            "reference": "1eaee09e4ac15923594502bc37e769b29eb7101d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "type": "library",
+        "names": [
+            "symfony\/yaml"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Symfony Community",
+                "email": null,
+                "homepage": "http:\/\/symfony.com\/contributors"
+            }
+        ],
+        "description": "Symfony Yaml Component",
+        "homepage": "http:\/\/symfony.com",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Yaml": ""
+            }
+        }
+    },
+    {
         "name": "symfony\/class-loader",
         "version": "2.1.0-dev",
         "version_normalized": "2.1.0.0-dev",
         "target-dir": "Symfony\/Component\/ClassLoader",
+        "time": "2012-02-10 04:35:11",
         "source": {
             "type": "git",
             "url": "http:\/\/github.com\/symfony\/ClassLoader.git",
@@ -26,9 +125,125 @@
         "license": [
             "MIT"
         ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Symfony Community",
+                "email": null,
+                "homepage": "http:\/\/symfony.com\/contributors"
+            }
+        ],
+        "description": "Symfony ClassLoader Component",
+        "homepage": "http:\/\/symfony.com",
         "autoload": {
             "psr-0": {
                 "Symfony\\Component\\ClassLoader": ""
+            }
+        }
+    },
+    {
+        "name": "symfony\/config",
+        "version": "2.1.0-dev",
+        "version_normalized": "2.1.0.0-dev",
+        "target-dir": "Symfony\/Component\/Config",
+        "time": "2012-02-15 05:38:31",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/symfony\/Config.git",
+            "reference": "00b748a23187c49ab9ae62b1b042487dea137dd0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/symfony\/Config\/zipball\/00b748a23187c49ab9ae62b1b042487dea137dd0",
+            "reference": "00b748a23187c49ab9ae62b1b042487dea137dd0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "type": "library",
+        "names": [
+            "symfony\/config"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Symfony Community",
+                "email": null,
+                "homepage": "http:\/\/symfony.com\/contributors"
+            }
+        ],
+        "description": "Symfony Config Component",
+        "homepage": "http:\/\/symfony.com",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Config": ""
+            }
+        }
+    },
+    {
+        "name": "symfony\/dependency-injection",
+        "version": "2.1.0-dev",
+        "version_normalized": "2.1.0.0-dev",
+        "target-dir": "Symfony\/Component\/DependencyInjection",
+        "time": "2012-02-03 23:03:45",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/symfony\/DependencyInjection.git",
+            "reference": "f1574627cff5f16be1a9d5d1929eb41b95b04ec7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/symfony\/DependencyInjection\/zipball\/f1574627cff5f16be1a9d5d1929eb41b95b04ec7",
+            "reference": "f1574627cff5f16be1a9d5d1929eb41b95b04ec7",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "suggest": {
+            "symfony\/yaml": "2.1.0-dev"
+        },
+        "recommend": {
+            "symfony\/config": "2.1.0-dev"
+        },
+        "type": "library",
+        "names": [
+            "symfony\/dependency-injection"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Symfony Community",
+                "email": null,
+                "homepage": "http:\/\/symfony.com\/contributors"
+            }
+        ],
+        "description": "Symfony DependencyInjection Component",
+        "homepage": "http:\/\/symfony.com",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\DependencyInjection": ""
             }
         }
     }

@@ -1,39 +1,44 @@
 <?php
-
 namespace Framework;
 
 
-class Localization {
+class Localization{
   
-  private static $_instance = null;
-  private function __construct() {}
+  public $server;
   
-
-  public static function getInstance() {
-    if(!isset(self::$_instance)) {
-      self::$_instance = new self();
+  public function __construct($server = false) 
+  {
+    if( $server === false ){
+      $this->server = $_SERVER;
     }
-    return self::$_instance;
+    else{
+      $this->server = $server;
+    }
+      
   }
-  
+
   /**
    * Get the ip address of the visitor.
    */
   public function getIp() {
-    if($_SERVER['HTTP_X_FORWARD_FOR']) {
-      $ip = $_SERVER['HTTP_X_FORWARD_FOR'];
+    if($this->server['HTTP_X_FORWARD_FOR']) {
+      $ip = $this->server['HTTP_X_FORWARD_FOR'];
     }
     else {
-      $ip = $_SERVER['REMOTE_ADDR'];
+      $ip = $this->server['REMOTE_ADDR'];
     }
+    
     if(strstr($ip, ',')) {
       $ips = explode(', ', $ip);
       $ip = $ips[0];
     }
+    
     return trim($ip);
   }
   
   public function getHost(){
+    $Config = new \Config\Config();
+    
     if(ENVIRONMENT == 'dev'){
       return 'purk';
     }

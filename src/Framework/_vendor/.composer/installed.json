@@ -1,0 +1,468 @@
+[
+    {
+        "name": "symfony\/class-loader",
+        "version": "2.1.0-dev",
+        "version_normalized": "2.1.0.0-dev",
+        "target-dir": "Symfony\/Component\/ClassLoader",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/symfony\/ClassLoader.git",
+            "reference": "3c683c933d65aa9a535c9c419d536428afdabf80"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/symfony\/ClassLoader\/zipball\/3c683c933d65aa9a535c9c419d536428afdabf80",
+            "reference": "3c683c933d65aa9a535c9c419d536428afdabf80",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "type": "library",
+        "names": [
+            "symfony\/class-loader"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\ClassLoader": ""
+            }
+        }
+    },
+    {
+        "name": "symfony\/yaml",
+        "version": "2.1.0-dev",
+        "version_normalized": "2.1.0.0-dev",
+        "target-dir": "Symfony\/Component\/Yaml",
+        "time": "2012-01-15 22:44:08",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/symfony\/Yaml.git",
+            "reference": "1eaee09e4ac15923594502bc37e769b29eb7101d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/symfony\/Yaml\/zipball\/1eaee09e4ac15923594502bc37e769b29eb7101d",
+            "reference": "1eaee09e4ac15923594502bc37e769b29eb7101d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "type": "library",
+        "names": [
+            "symfony\/yaml"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Symfony Community",
+                "email": null,
+                "homepage": "http:\/\/symfony.com\/contributors"
+            }
+        ],
+        "description": "Symfony Yaml Component",
+        "homepage": "http:\/\/symfony.com",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Yaml": ""
+            }
+        }
+    },
+    {
+        "name": "twig\/twig",
+        "version": "1.7.0-dev",
+        "version_normalized": "1.7.0.0-dev",
+        "time": "2012-02-15 08:29:31",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/fabpot\/Twig.git",
+            "reference": "4dee4e5841d1a59862b43ca8ed44a933f41e2024"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/fabpot\/Twig\/zipball\/4dee4e5841d1a59862b43ca8ed44a933f41e2024",
+            "reference": "4dee4e5841d1a59862b43ca8ed44a933f41e2024",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "type": "library",
+        "names": [
+            "twig\/twig"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "BSD"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Armin Ronacher",
+                "email": "armin.ronacher@active-4.com",
+                "homepage": null
+            }
+        ],
+        "description": "Twig, the flexible, fast, and secure template language for PHP",
+        "homepage": "http:\/\/twig.sensiolabs.org",
+        "keywords": [
+            "templating"
+        ],
+        "autoload": {
+            "psr-0": {
+                "Twig_": "lib\/"
+            }
+        }
+    },
+    {
+        "name": "symfony\/dependency-injection",
+        "version": "2.1.0-dev",
+        "version_normalized": "2.1.0.0-dev",
+        "target-dir": "Symfony\/Component\/DependencyInjection",
+        "time": "2012-02-03 23:03:45",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/symfony\/DependencyInjection.git",
+            "reference": "f1574627cff5f16be1a9d5d1929eb41b95b04ec7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/symfony\/DependencyInjection\/zipball\/f1574627cff5f16be1a9d5d1929eb41b95b04ec7",
+            "reference": "f1574627cff5f16be1a9d5d1929eb41b95b04ec7",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "suggest": {
+            "symfony\/yaml": "2.1.0-dev"
+        },
+        "recommend": {
+            "symfony\/config": "2.1.0-dev"
+        },
+        "type": "library",
+        "names": [
+            "symfony\/dependency-injection"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Symfony Community",
+                "email": null,
+                "homepage": "http:\/\/symfony.com\/contributors"
+            }
+        ],
+        "description": "Symfony DependencyInjection Component",
+        "homepage": "http:\/\/symfony.com",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\DependencyInjection": ""
+            }
+        }
+    },
+    {
+        "name": "swiftmailer\/swiftmailer",
+        "version": "4.1.6-dev",
+        "version_normalized": "4.1.6.0-dev",
+        "time": "2012-01-10 13:18:14",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/swiftmailer\/swiftmailer.git",
+            "reference": "0243dc3b18c784adda72e71f6bd34f11fef69b4b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/swiftmailer\/swiftmailer\/zipball\/0243dc3b18c784adda72e71f6bd34f11fef69b4b",
+            "reference": "0243dc3b18c784adda72e71f6bd34f11fef69b4b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "type": "library",
+        "names": [
+            "swiftmailer\/swiftmailer"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Chris Corbyn",
+                "email": "",
+                "homepage": null
+            }
+        ],
+        "description": "Swiftmailer, free feature-rich PHP mailer",
+        "homepage": "http:\/\/swiftmailer.org",
+        "keywords": [
+            "mail",
+            "mailer"
+        ]
+    },
+    {
+        "name": "monolog\/monolog",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
+        "time": "2011-10-24 02:39:02",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/Seldaek\/monolog.git",
+            "reference": "1.0.2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https:\/\/github.com\/Seldaek\/monolog\/zipball\/1.0.2",
+            "reference": "1.0.2",
+            "shasum": "837067f3d6f183f5c035c3da460f5c5272645b84"
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "type": "library",
+        "names": [
+            "monolog\/monolog"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http:\/\/seld.be"
+            }
+        ],
+        "description": "Logging for PHP 5.3",
+        "homepage": "http:\/\/github.com\/Seldaek\/monolog",
+        "keywords": [
+            "log",
+            "logging"
+        ],
+        "autoload": {
+            "psr-0": {
+                "Monolog": "src\/"
+            }
+        }
+    },
+    {
+        "name": "doctrine\/common",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "time": "2011-12-19 04:08:04",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/doctrine\/common.git",
+            "reference": "f78df1166ce28ceb38df4b43cb967137ae538cf4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/doctrine\/common\/zipball\/f78df1166ce28ceb38df4b43cb967137ae538cf4",
+            "reference": "f78df1166ce28ceb38df4b43cb967137ae538cf4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "type": "library",
+        "names": [
+            "doctrine\/common"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan H. Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": null
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": null
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org",
+                "homepage": null
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de",
+                "homepage": null
+            },
+            {
+                "name": "Johannes M. Schmitt",
+                "email": "schmittjoh@gmail.com",
+                "homepage": "https:\/\/github.com\/schmittjoh"
+            }
+        ],
+        "description": "Common Library for Doctrine projects",
+        "homepage": "http:\/\/www.doctrine-project.org",
+        "keywords": [
+            "collections",
+            "spl",
+            "eventmanager",
+            "annotations",
+            "persistence"
+        ],
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\Common": "lib\/"
+            }
+        }
+    },
+    {
+        "name": "symfony\/symfony",
+        "version": "v2.0.10",
+        "version_normalized": "2.0.10.0",
+        "time": "2012-02-06 01:49:11",
+        "source": {
+            "type": "git",
+            "url": "http:\/\/github.com\/symfony\/symfony.git",
+            "reference": "v2.0.10"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http:\/\/github.com\/symfony\/symfony\/zipball\/v2.0.10",
+            "reference": "v2.0.10",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "doctrine\/common": "2.1.*",
+            "monolog\/monolog": "1.0.*",
+            "swiftmailer\/swiftmailer": ">=4.1.2,<4.2-dev",
+            "twig\/twig": ">=1.1,<2.0-dev"
+        },
+        "replace": {
+            "symfony\/doctrine-bridge": "v2.0.10",
+            "symfony\/monolog-bridge": "v2.0.10",
+            "symfony\/twig-bridge": "v2.0.10",
+            "symfony\/doctrine-abstract-bundle": "v2.0.10",
+            "symfony\/doctrine-bundle": "v2.0.10",
+            "symfony\/framework-bundle": "v2.0.10",
+            "symfony\/monolog-bundle": "v2.0.10",
+            "symfony\/security-bundle": "v2.0.10",
+            "symfony\/swiftmailer-bundle": "v2.0.10",
+            "symfony\/twig-bundle": "v2.0.10",
+            "symfony\/web-profiler-bundle": "v2.0.10",
+            "symfony\/browser-kit": "v2.0.10",
+            "symfony\/class-loader": "v2.0.10",
+            "symfony\/config": "v2.0.10",
+            "symfony\/console": "v2.0.10",
+            "symfony\/css-selector": "v2.0.10",
+            "symfony\/dependency-injection": "v2.0.10",
+            "symfony\/dom-crawler": "v2.0.10",
+            "symfony\/event-dispatcher": "v2.0.10",
+            "symfony\/finder": "v2.0.10",
+            "symfony\/form": "v2.0.10",
+            "symfony\/http-foundation": "v2.0.10",
+            "symfony\/http-kernel": "v2.0.10",
+            "symfony\/locale": "v2.0.10",
+            "symfony\/process": "v2.0.10",
+            "symfony\/routing": "v2.0.10",
+            "symfony\/security": "v2.0.10",
+            "symfony\/serializer": "v2.0.10",
+            "symfony\/templating": "v2.0.10",
+            "symfony\/translation": "v2.0.10",
+            "symfony\/validator": "v2.0.10",
+            "symfony\/yaml": "v2.0.10"
+        },
+        "type": "library",
+        "names": [
+            "symfony\/symfony",
+            "symfony\/doctrine-bridge",
+            "symfony\/monolog-bridge",
+            "symfony\/twig-bridge",
+            "symfony\/doctrine-abstract-bundle",
+            "symfony\/doctrine-bundle",
+            "symfony\/framework-bundle",
+            "symfony\/monolog-bundle",
+            "symfony\/security-bundle",
+            "symfony\/swiftmailer-bundle",
+            "symfony\/twig-bundle",
+            "symfony\/web-profiler-bundle",
+            "symfony\/browser-kit",
+            "symfony\/class-loader",
+            "symfony\/config",
+            "symfony\/console",
+            "symfony\/css-selector",
+            "symfony\/dependency-injection",
+            "symfony\/dom-crawler",
+            "symfony\/event-dispatcher",
+            "symfony\/finder",
+            "symfony\/form",
+            "symfony\/http-foundation",
+            "symfony\/http-kernel",
+            "symfony\/locale",
+            "symfony\/process",
+            "symfony\/routing",
+            "symfony\/security",
+            "symfony\/serializer",
+            "symfony\/templating",
+            "symfony\/translation",
+            "symfony\/validator",
+            "symfony\/yaml"
+        ],
+        "installation-source": "dist",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": null
+            },
+            {
+                "name": "Symfony Community",
+                "email": null,
+                "homepage": "http:\/\/symfony.com\/contributors"
+            }
+        ],
+        "description": "The Symfony PHP framework",
+        "homepage": "http:\/\/symfony.com",
+        "keywords": [
+            "framework"
+        ],
+        "autoload": {
+            "psr-0": {
+                "Symfony": "src\/"
+            }
+        }
+    }
+]

@@ -1,0 +1,19 @@
+name: 'AppNamespace'
+
+dir:
+  root: '/var/www/'
+
+app:  
+  name: 'App'
+apps:
+  admin:
+    name: 'backend'
+    clean_url: true
+    name_copy: @name
+    dir: '%dir.root%admin/'
+    namespace: '%name%/Admin'
+    environment: @env
+    languages: 
+      - nl
+      - fr
+      - de

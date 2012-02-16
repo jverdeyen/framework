@@ -12,8 +12,8 @@ class Bootstrap{
     try{      
       require 'vendor/.composer/autoload.php';    
       
-      require_once dirname(__FILE__).'/vendor/Twig/Extensions/Autoloader.php';
-      \Twig_Extensions_Autoloader::register();
+      //require_once dirname(__FILE__).'/vendor/Twig/Extensions/Autoloader.php';
+      //\Twig_Extensions_Autoloader::register();
       
       $this->checkBootstrap();
       Logger::getInstance()->setErrorHandlers();
