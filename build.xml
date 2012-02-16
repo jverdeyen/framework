@@ -73,6 +73,7 @@
 
    <fileset dir="${basedir}/src">
     <include name="**/*.php" />
+    <exclude name="Framwork/vendor/**" />
     <modified />
    </fileset>
 
