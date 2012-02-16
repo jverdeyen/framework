@@ -73,14 +73,16 @@
 
    <fileset dir="${basedir}/src">
     <include name="**/*.php" />
-    <exclude name="Framwork/vendor/**" />
     <modified />
+    <exclude name="Framework/vendor/**" />
    </fileset>
 
    <fileset dir="${basedir}/tests">
     <include name="**/*.php" />
     <modified />
+    <exclude name="Framework/vendor/**" />
    </fileset>
+   
   </apply>
  </target>
 
