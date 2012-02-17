@@ -46,8 +46,11 @@
     <property name="sonar.sources" value="src" />
     <property name="sonar.tests" value="tests" />
     <property name="sonar.language" value="php" />
-    <property name="sonar.exclusions" value="vendor/**" />
+    <property name="sonar.exclusions" value="Framework/vendor/**/*" />
     <property name="sonar.phpUnit.analyze.test.directory" value="false" />
+    <property name="sonar.phpCodesniffer.argumentLine" value="--ignore=*/vendor" />
+    <property name="sonar.phpDepend.exclude" value="${vendor}" />
+    <property name="sonar.phpPmd.argumentLine" value="--exclude=${vendor}" />
     <!-- <property name="sonar.scm.url" value="scm:svn:http://svn.codehaus.org/sonar-plugins/trunk/php/math-php-test" /> -->
     <sonar:sonar key="fr.hashcode:framework" version="1.0" xmlns:sonar="antlib:org.sonar.ant"/>
   </target>
