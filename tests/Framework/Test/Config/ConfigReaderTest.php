@@ -39,6 +39,7 @@ class ConfigReaderTest extends \PHPUnit_Framework_TestCase
       //$loader = new \Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container);
       //$loader->load(__DIR__.'../services.yml');
   }
+
   public function testYamlConfigReader()
   {
     $file = __DIR__.'/yml/config.yml';
