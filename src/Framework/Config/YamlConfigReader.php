@@ -3,26 +3,35 @@ namespace Framework\Config;
 
 Class YamlConfigReader implements ConfigReaderInterface{
   
-  public static $config;
+  public $config;
     
-  public function __construct($file){
-    $this->config = $this->getFileContent($file);
+  public function __construct($file = false)
+  {
+    if($file !== false){
+      $this->config = $this->getFileContent($file);
+    }
+    
   }
   
-  public function getConfigArray(){
+  public function getConfigArray()
+  {
     return $this->config;
   }
   
-  
-  public function add($source){
+  public function add($source)
+  {
     $config = $this->getFileContent($source);
     
-    if(is_array($config)){
+    if(is_array($config) && is_array($this->config) ){
       $this->config = array_merge($config,$this->config);
+    }
+    elseif(!is_array($this->config)){
+      $this->config = $config;
     }
   }
 
-  public function getFileContent($file){
+  public function getFileContent($file)
+  {
     if(file_exists($file)){
       return \Symfony\Component\Yaml\Yaml::parse($file);
     }

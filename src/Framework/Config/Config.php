@@ -3,13 +3,18 @@ namespace Framework\Config;
 
 Class Config implements ConfigInterface{
   
-  public static $configuration;  
+  public static $configuration = array();  
   public $Cache;
   
-  public function __construct(ConfigReaderInterface $ConfigReader,CacheInterface $Cache = null)
+  public function __construct(ConfigReaderInterface $ConfigReader = null ,CacheInterface $Cache = null)
   {
-    $this->configuration = $ConfigReader->getConfigArray();
-    $this->Cache = $Cache;
+    if($ConfigReader != null){
+       $this->configuration = $ConfigReader->getConfigArray();
+    }
+    if($Cache != null){
+      $this->Cache = $Cache;
+    }
+    
   }
   
   public function set($key,$data)
@@ -19,6 +24,7 @@ Class Config implements ConfigInterface{
   
   public function get($key)
   {
+      
     if(strpos($key,'.') >= 1){
       $value = $this->getDeepKey($key);
     }else{
@@ -34,7 +40,8 @@ Class Config implements ConfigInterface{
     return $value;
   }
   
-  public function replacePlaceholder($value, $pattern = "/\%([a-z]+(.[a-z]+)*)\%/" ){
+  public function replacePlaceholder($value, $pattern = "/\%([a-z]+(.[a-z]+)*)\%/" )
+  {
     preg_match_all($pattern, $value, $matches);
     
     if(count($matches[0]) <= 0)
@@ -47,7 +54,8 @@ Class Config implements ConfigInterface{
     return $value;
   }
   
-  public function getDeepKey($key){
+  public function getDeepKey($key)
+  {
     $keys = explode('.',$key);
     $return = $this->configuration[$keys[0]];
     for($i=1;$i<count($keys);$i++){

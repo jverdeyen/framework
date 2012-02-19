@@ -10,6 +10,7 @@ use Symfony\Component\Config\FileLocator;
 class ConfigReaderTest extends \PHPUnit_Framework_TestCase 
 {
  
+
   public function testDIConfig(){
     
     $file = __DIR__.'/yml/config.yml';
@@ -22,7 +23,6 @@ class ConfigReaderTest extends \PHPUnit_Framework_TestCase
     $serviceContainer
         ->register('config', '\Framework\Config\Config')
         ->addArgument($YamlConfigReader);
-    
     
     
     
@@ -62,6 +62,7 @@ class ConfigReaderTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($Config->get('env'),'dev');
     $this->assertEquals($Config->get('apps.admin.environment'),'dev');
     $this->assertEquals($Config->get('apps.admin.languages'), array('nl','fr','de'));
+    $this->assertEquals($Config->get('app'),array('name' => 'App', 'website' => 'www.test.be'));
    
   }
   

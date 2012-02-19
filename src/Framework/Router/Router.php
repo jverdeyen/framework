@@ -1,27 +1,28 @@
 <?php
 namespace Framework\Router;
 
-class Router{
+class Router implements RouterInterface{
   
   private $Request = null;
   private $Mappings = array();
   private $MatchedMapping = false;
-  private $Caching = false;
+  private $Cache = null;
   private static $reserved_words = array('controller','language','action','app');
   private static $instance = null;
   
   private $mapping_file;
   
-  public function __construct(Request $Request,$mapping_file = false){
-    if($mapping_file === false)
-      $mapping_file = ROOT_DIR.'include/mapping.yml';
-      
-    $this->mapping_file = $mapping_file;
+  public function __construct(  \Framework\HTTP\RequestInterface $Request,
+                                \Framework\Config\ConfigInterface $Config,
+                                \Framework\Cache\CacheInterface $Cache = null)
+  {
     $this->Request = $Request;
+    $this->Config = $Config;
+    $this->Cache = $Cache;
   }
   
-  public function setCaching($Caching){
-    $this->Caching = $Caching;
+  public function setCache(\Framework\Cache\CacheInterface $Cache){
+    $this->Cache = $Cache;
   }
   
   /**

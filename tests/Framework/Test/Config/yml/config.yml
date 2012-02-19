@@ -5,9 +5,19 @@ dir:
 
 app:  
   name: 'App'
+  website: 'www.test.be'
 apps:
-  admin:
-    name: 'backend'
+  admin: #subdomain
+    name: backend
+    url: @admin_url
+    clean_url: true
+    template_dir: %dir.root%/templates/backend/
+    cookie:
+      language: %app.name%-%apps.admin.name%-language
+    default_controller: index
+    default_aciton: index
+    default_language: nl
+    multi_language: true
     clean_url: true
     name_copy: @name
     dir: '%dir.root%admin/'

@@ -1,18 +1,21 @@
 <?php 
-namespace Framework;
+namespace Framework\HTTP;
 
-class Request {
+class Request implements RequestInterface{
 
   private $controller;
   private $action;
   private $language;
-  private $app;
+  private $AppConfig;
   private $app_name;
   private $extra_params;
   private $params;
   
-  public function __construct(){
-   
+  public $Server;
+  public $Config;
+  
+  public function __construct(Server $Server, \Framework\Config\ConfigInterface $Config){
+   /*
     $this->app = $this->getApp();
     $this->app_name = $this->getAppName();
     $this->initParams();
@@ -20,10 +23,13 @@ class Request {
     $this->initController();
     $this->initAction();
     $this->initLanguage();
-
+    */
+    $this->Server = $Server;
+    $this->Config = $Config;
   }
   
   private function initController(){
+    
     if(MULTI_LANGUAGE === false){
 	    if(!$this->controller = $this->getParam(0))
   	    $this->controller = DEFAULT_CONTROLLER;
@@ -101,6 +107,35 @@ class Request {
   public function getLanguage(){return $this->language; }
   public function setLanguage($language){$this->language = $language;}
  
+ 
+  public function determineApp(Server $Server = null, \Framework\Config\ConfigInterface $Config = null)
+  {
+    if($Config == null){
+      $Config = $this->Config;
+    }
+    
+    if($Server == null){
+      $Server = $this->Server;
+    }
+    
+    list($subdomain, $rest) = explode('.',$Server->get('SERVER_NAME'),2);
+    $apps = $Config->get('apps');
+    $detected_app = false;
+    
+    foreach($apps as $key => $app){
+      if(strpos($subdomain, $key) !== false){
+        $detected_app = $app;
+        break;
+      }
+    }
+    
+    if($detected_app === false){
+      $detected_app = $Config->get('apps.default');
+    }
+    
+    return $detected_app;
+  }
+  
   public function getApp(){
 
     if(!isset($this->app)){

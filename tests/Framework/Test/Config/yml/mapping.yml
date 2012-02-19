@@ -1,0 +1,13 @@
+mapping:
+  frontend:
+    first_page:
+      pattern: '/producten/{name}/{id}' 
+      controller: product
+      action: category
+      app: frontend
+      extra:
+          name:
+            match: '*'
+            default: ''
+          id: 
+            match: '/^[0-9]+$/'

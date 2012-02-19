@@ -1,2 +1,3 @@
 environment: dev
 env: @environment
+admin_url: www.test.be
