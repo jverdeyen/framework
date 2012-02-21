@@ -3,25 +3,33 @@ namespace Framework\Router;
 
 class Router implements RouterInterface{
   
-  private $Request = null;
+  public $AppRequest = null;
+  public $Config = null;
+  public $Cache = null;
+  
   private $Mappings = array();
   private $MatchedMapping = false;
-  private $Cache = null;
+  
   private static $reserved_words = array('controller','language','action','app');
-  private static $instance = null;
-  
-  private $mapping_file;
-  
-  public function __construct(  \Framework\HTTP\RequestInterface $Request,
-                                \Framework\Config\ConfigInterface $Config,
-                                \Framework\Cache\CacheInterface $Cache = null)
+    
+  public function __construct(  \Framework\HTTP\RequestInterface $AppRequest,
+                                \Framework\Cache\CacheInterface $Cache = null,
+                                \Framework\Config\Config $Config = null)
   {
-    $this->Request = $Request;
-    $this->Config = $Config;
+    
+    if($Config == null){
+      $this->Config = $AppRequest->Config;
+    }
+    else{
+      $this->Config  = $Config;
+    }
+    
+    $this->AppRequest = $AppRequest;
     $this->Cache = $Cache;
   }
   
-  public function setCache(\Framework\Cache\CacheInterface $Cache){
+  public function setCache(\Framework\Cache\CacheInterface $Cache)
+  {
     $this->Cache = $Cache;
   }
   
@@ -29,11 +37,12 @@ class Router implements RouterInterface{
    * Converts the request object into a matching mapping
    */
   public function route(){
-    $this->readMappings();
+    $this->AppRequest->initApp();
+    $this->getMappings();
   
     if(!$this->isEnabled())
       return false;
-    
+    /*
     $Mapping = $this->findAMapping();
 
     if($Mapping != false){
@@ -43,6 +52,7 @@ class Router implements RouterInterface{
       $this->Request->setApp($Mapping->getApp());
       $this->Request->setExtraParams($this->Request);
     }
+    */
   }
   
   public function findAUrlMapping($uri){
@@ -187,42 +197,38 @@ class Router implements RouterInterface{
     
   }
     
-  private function readMappings()
+  public function getMappings($app = null)
   {
-    if($this->Caching != false){
+    if($this->Caching != null){
       if(!($this->Mappings = $this->Caching->getData('mapping_yml_'.$this->Request->getAppName()))){
-        $this->readMappingsFromFile();
+        $this->getMappingsFromConfig();
         $this->Caching->setData('mapping_yml_'.$this->Request->getAppName(),$this->Mappings);
       }            
-    } else {
-      $this->readMappingsFromFile();
+    } 
+    else{
+      $this->getMappingsFromConfig();
     }    
   }
   
-  private function readMappingsFromFile()
+  private function getMappingsFromConfig(\Framework\Config\Config $Config = null)
   {
-    if(!file_exists($this->mapping_file))
-      return false;
+    if($Config == null){
+      $Config = $this->Config;
+    }
       
-    $mapping = \Symfony\Component\Yaml\Yaml::parse($this->mapping_file);
-    $mapping = $mapping[$this->Request->getAppName()];
+    $mappingArray = $Config->get('mapping.'.$Config->get('apps.'.$this->AppRequest->app.'.name'));
 
-    if(!is_array($mapping))
+    if(!is_array($mappingArray))
       return false;
 
-    foreach($mapping as $key => $value){  
+    foreach($mappingArray as $key => $value){  
       $Mapping = new Mapping($key,$value);
       $Mapping->fillUpSlugsInExtra();
-      $Mapping->fillUpMatches(self::getReservedWords());
+     // $Mapping->fillUpMatches(self::getReservedWords());
       $this->Mappings[] = $Mapping;
     }
-    
+    var_dump($Mapping);
     return $this->Mapping;
-  }
-  
-  public static function getReservedWords()
-  {
-    return self::$reserved_words;
   }
 
   public function foundMapping(){

@@ -6,7 +6,8 @@ use Framework;
 class RequestTest extends \PHPUnit_Framework_TestCase 
 {
   
-  public function setupConfig(){
+  public function setupConfig()
+  {
     $config = __DIR__.'/../Config/yml/config.yml';
     $env = __DIR__.'/../Config/yml/config_env.yml';
     $mapping = __DIR__.'/../Config/yml/mapping.yml';
