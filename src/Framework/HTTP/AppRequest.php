@@ -1,146 +1,89 @@
 <?php 
 namespace Framework\HTTP;
 
-class Request implements RequestInterface{
-
-  /*
-  private $controller;
-  private $action;
-  private $language;
-  private $app;
+class AppRequest implements RequestInterface{
   
-  private $app_name;
-  private $extra_params;
-  private $params;
-  */
+  public $Request;
+  public $Config;
   
-  public $Get;
-  public $Post;
-  public $Cookie;
-  public $Files;
-  public $Server;
+  public $app;
+  public $controller;
+  public $action;
+  public $language;
   
-  public function __construct(
-                Data\Get $Get = null,
-                Data\Post $Post = null,
-                Data\Cookie $Cookie = null,
-                Data\Files $Files = null,
-                Data\Server $Server = null
-                )
+  public function __construct(Request $Request = null,\Framework\Config\Config $Config = null)
   {
-
+    $this->Request = $Request;
+    $this->Config = $Config;
+  }
+  
+  public function initApp()
+  {
+    $this->app = $this->determineAppKey();
+  }
+  
+  public function determineAppKey(Server $Server = null, \Framework\Config\ConfigInterface $Config = null)
+  {
+    if($Config == null){
+      $Config = $this->Config;
+    }
+    
     if($Server == null){
-      $Server = new Data\Server();
-    }
-      
-    if($Get == null){
-      $Get = new Data\Get();
-    }
-      
-    if($Post == null){
-      $Post = new Data\Post();
-    }
-      
-    if($Cookie == null){
-      $Cookie = new Data\Cookie();
+      $Server = $this->Request->getServer();
     }
     
-    if($Files == null){
-      $Files = new Data\Files();
+    list($subdomain, $rest) = explode('.',$Server->get('SERVER_NAME'),2);
+    $apps = $Config->get('apps');
+    $detected_app = false;
+    
+    foreach($apps as $key => $app){
+      if(strpos($subdomain, $key) !== false){
+        $detected_app = $key;
+        break;
+      }
     }
     
-    $this->Get = $Get;
-    $this->Post = $Post;
-    $this->Cookie = $Cookie;
-    $this->Files = $Files;
-    $this->Server = $Server;
+    if($detected_app === false){
+      $detected_app = $Config->get('apps.default');
+    }
+  
+    return $detected_app;
+  }
+  
+  
+  
+  public function determineController(){
+    $controller_param_index = 0;
+    $controller = $this->Config->get('apps.'.$this->app.'.default_controller');
     
-    $this->determineParams();
+    if($this->Config->get('apps.'.$this->app.'.multi_language')){
+      $controller_param_index = 1;
+    }
+    
+    if($this->Request->getParam($controller_param_index)){
+      $controller = $this->Request->getParam($controller_param_index);
+    }
+    
+    return $controller;
+  }
+  
+  public function determineAction(){
+    $action_param_index = 1;
+    $action = $this->Config->get('apps.'.$this->app.'.default_action');
+    
+    if($this->Config->get('apps.'.$this->app.'.multi_language')){
+      $action_param_index = 2;
+    }
+    
+    if($this->Request->getParam($action_param_index)){
+      $action = $this->Request->getParam($action_param_index);
+    }
+    
+    return $action;
   }
   
 
-  public function getGet()
-  {
-    return $this->Get;
-  }
-  
-  public function setGet(Data\Get $Get)
-  {
-    $this->Get = $Get;
-  }
-  
-  public function getPost()
-  {
-    return $this->Post;
-  }
-  
-  public function setPost(Data\Post $Post)
-  {
-    $this->Post = $Post;
-  }
-  
-  public function getCookie()
-  {
-    return $this->Cookie;
-  }
-  
-  public function setCookie(Data\Post $Cookie)
-  {
-    $this->Cookie = $Cookie;
-  }
-  
-  public function setFiles(Data\Files $Files)
-  {
-    $this->Files = $Files;
-  }
-  
-  public function getFiles()
-  {
-    return $this->Files;
-  }
-  
-  public function setServer(Data\Server $Server)
-  {
-    $this->Server = $Server;
-  }
-  
-  public function getServer()
-  {
-    return $this->Server;
-  }
-  
-  public function determineParams()
-  {
-    $query_string = $this->Server->get('QUERY_STRING');
-    
-    if(substr($query_string,0,1) == '/'){
-      $query_string = substr($query_string,1);
-    }
-    
-	  $params =  explode('/', $query_string);
-  	if(end($params) == ''){
-  	  array_pop($params);
-  	}
-  	$this->params = $params;
-	}
-	
-	public function getParam($key){
-	  return trim($this->params[$key]) == '' ? false : trim($this->params[$key]);
-	}
-
-   
   /*
-  public function initController(){
-    
-    if(MULTI_LANGUAGE === false){
-	    if(!$this->controller = $this->getParam(0))
-  	    $this->controller = DEFAULT_CONTROLLER;
-	  }else{
-	    if(!$this->controller = $this->getParam(1))
-  	    $this->controller = DEFAULT_CONTROLLER;
-	  }
-  }
-  
   private function initAction(){
     if(MULTI_LANGUAGE === false){
 	    if(!$this->action = $this->getParam(1))
@@ -190,36 +133,16 @@ class Request implements RequestInterface{
     }
 	}
 	
-	
+	private function initParams(){
+	  $params =  explode('/', $_SERVER['QUERY_STRING']);
+  	if(end($params) == ''){
+  	  array_pop($params);
+  	}
+  	$this->params = $params;
+	}
  
  
-  public function determineAppKey(Server $Server = null, \Framework\Config\ConfigInterface $Config = null)
-  {
-    if($Config == null){
-      $Config = $this->Config;
-    }
-    
-    if($Server == null){
-      $Server = $this->Server;
-    }
-    
-    list($subdomain, $rest) = explode('.',$Server->get('SERVER_NAME'),2);
-    $apps = $Config->get('apps');
-    $detected_app = false;
-    
-    foreach($apps as $key => $app){
-      if(strpos($subdomain, $key) !== false){
-        $detected_app = $app;
-        break;
-      }
-    }
-    
-    if($detected_app === false){
-      $detected_app = $Config->get('apps.default');
-    }
-    
-    return $detected_app;
-  }
+  
   
   public function getApp(){
 

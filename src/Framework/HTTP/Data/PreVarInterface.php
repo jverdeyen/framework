@@ -1,5 +1,5 @@
 <?php
-namespace Framework\HTTP;
+namespace Framework\HTTP\Data;
 
 interface PreVarInterface{
   public function get($key);

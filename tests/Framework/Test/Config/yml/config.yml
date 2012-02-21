@@ -18,7 +18,6 @@ apps:
     default_aciton: index
     default_language: nl
     multi_language: true
-    clean_url: true
     name_copy: @name
     dir: '%dir.root%admin/'
     namespace: '%name%/Admin'
@@ -27,3 +26,11 @@ apps:
       - nl
       - fr
       - de
+  www:
+    name: frontend
+    url: @www_url
+    clean_url: true
+    default_controller: start
+    default_action: index
+    
+  default: %admin%

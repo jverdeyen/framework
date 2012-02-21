@@ -7,6 +7,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 {
   
   public function testRouterSetup() {
+    /*
     $config = __DIR__.'/../Config/yml/config.yml';
     $env = __DIR__.'/../Config/yml/config_env.yml';
     $mapping = __DIR__.'/../Config/yml/mapping.yml';
@@ -19,6 +20,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     $Config = new \Framework\Config\Config($YamlConfigReader);
     $Request = new \Framework\HTTP\Request(new \Framework\HTTP\Server(), $Config);
     $Router = new \Framework\Router\Router($Request,$Config);
+    */
         
   }
 }
