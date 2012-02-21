@@ -11,18 +11,40 @@ class AppRequest implements RequestInterface{
   public $action;
   public $language;
   
-  public function __construct(Request $Request = null,\Framework\Config\Config $Config = null)
+  public function __construct(Request $Request = null, \Framework\Config\Config $Config = null)
   {
     $this->Request = $Request;
     $this->Config = $Config;
   }
   
-  public function initApp()
-  {
-    $this->app = $this->determineAppKey();
+  public function initAll(){
+    $this->initApp();
+    $this->initController();
+    $this->initAction();
+    $this->initLanguage();
   }
   
-  public function determineAppKey(Server $Server = null, \Framework\Config\ConfigInterface $Config = null)
+  public function initApp()
+  {
+    $this->app = $this->findAppKey();
+  }
+  
+  public function initController()
+  {
+    $this->controller = $this->findController();
+  }
+  
+  public function initAction()
+  {
+    $this->action = $this->findAction();
+  }
+  
+  public function initLanguage()
+  {
+    $this->languae = $this->findLanguage();
+  }
+  
+  public function findAppKey(Server $Server = null, \Framework\Config\ConfigInterface $Config = null)
   {
     if($Config == null){
       $Config = $this->Config;
@@ -49,12 +71,11 @@ class AppRequest implements RequestInterface{
   
     return $detected_app;
   }
-  
-  
-  
-  public function determineController(){
+    
+  public function findController()
+  {
     $controller_param_index = 0;
-    $controller = $this->Config->get('apps.'.$this->app.'.default_controller');
+    $controller = $this->Config->get('apps.'.$this->app.'.defaults.controller');
     
     if($this->Config->get('apps.'.$this->app.'.multi_language')){
       $controller_param_index = 1;
@@ -67,9 +88,10 @@ class AppRequest implements RequestInterface{
     return $controller;
   }
   
-  public function determineAction(){
+  public function findAction()
+  {
     $action_param_index = 1;
-    $action = $this->Config->get('apps.'.$this->app.'.default_action');
+    $action = $this->Config->get('apps.'.$this->app.'.defaults.action');
     
     if($this->Config->get('apps.'.$this->app.'.multi_language')){
       $action_param_index = 2;
@@ -82,44 +104,36 @@ class AppRequest implements RequestInterface{
     return $action;
   }
   
-
-  /*
-  private function initAction(){
-    if(MULTI_LANGUAGE === false){
-	    if(!$this->action = $this->getParam(1))
-  	    $this->action = DEFAULT_ACTION;
-	  }else{
-	    if(!$this->action = $this->getParam(2))
-  	    $this->action = DEFAULT_ACTION;
-	  }
-  }
-  
-  private function initLanguage(){
-    if(MULTI_LANGUAGE === false){
-	    $this->language = DEFAULT_LANGUAGE;
-      return true;
+  public function findLanguage()
+  {
+    if($this->Config->get('apps.'.$this->app.'.multi_language') == false){
+      return $this->Config->get('apps.'.$this->app.'.defaults.language');
     }
-	  
-	  $browser_lang = Localization::getBrowserLanguage();
-
-	  if($this->getParam(0)){
-	     // check in de url
-	    $this->language = $this->getParam(0);
-	  }elseif(self::getCookie($this->getAppLanguageCookieName())){ 
-	    // check de cookie
-	    $this->language = self::getCookie($this->getAppLanguageCookieName());
-	  }elseif($browser_lang){
-	    // check de browser language
-	    $this->language = $browser_lang;
-	  }else{
-	    $this->language = DEFAULT_LANGUAGE;
-	    // toon default
-	  }
-	  
-	  if(in_array($this->language,unserialize(LANGUAGES)))
-      self::setCookie($this->getAppLanguageCookieName(),$this->language);
+    
+    /**
+     * 1. Check url language
+     * 2. Check cookie language
+     * 3. Check browser language
+     * 4. Use default language
+     */
+     if(in_array($this->Request->getParam(0),$this->Config->get('apps.'.$this->app.'.languages'))){
+       return $this->Request->getParam(0);
+     }
+     
+     if(in_array($this->Request->getCookie($this->Config->get('apps.'.$this->app.'.cookie.language')),$this->Config->get('apps.'.$this->app.'.languages'))){
+       return $this->Request->getCookie($this->Config->get('apps.'.$this->app.'.cookie.language'));
+     }
+     
+     //TODO retrieve browser language
+     
+     return $this->Config->get('apps.'.$this->app.'.defaults.language');
   }
   
+  public function getServer()
+  {
+    return $this->Server();
+  }
+  /*
   private function initExtraParams(){
     $params = $this->getParams();
 	  $total = count($params);
@@ -132,74 +146,7 @@ class AppRequest implements RequestInterface{
 	      $this->extra_params = array_slice($params, 3, $total-2);
     }
 	}
-	
-	private function initParams(){
-	  $params =  explode('/', $_SERVER['QUERY_STRING']);
-  	if(end($params) == ''){
-  	  array_pop($params);
-  	}
-  	$this->params = $params;
-	}
- 
- 
-  
-  
-  public function getApp(){
 
-    if(!isset($this->app)){
-      list($subdomain, $rest) = explode('.', $this->getServer('SERVER_NAME'), 2);
-      $apps = unserialize(APPS);
-      
-      foreach($apps as $key => $app){
-        if( strpos($subdomain,$key) !== false){
-          $this->app = $app;
-          break;
-        }
-      }   
-      
-      if(!is_array($this->app))
-        $this->app = $apps['default'];
-      
-      if(!is_array($this->app))
-        throw new \Exception('No default Application name defined!');
-      
-   }
-   return $this->app;
-  }
-  
-  public function setApp($name){
-    $apps = unserialize(APPS);
-    foreach($apps as $key => $app){
-      if($app['name'] == $name){
-        $this->_app = $app;
-        return true;
-      } 
-    }
-    throw new \Exception('The application name can not be found: '.$name);
-  }
-  
-  public function getAppName(){
-    $this->_app = $this->getApp();
-    return $this->_app['name'];
-  }
-  
-  public function setAppName($x){
-    return $this->setApp($x);
-  }
-  
-  
-  public function getAppLanguageCookieName(){
-    $this->_app = $this->getApp();
-    if($this->_app['cookie_name_language'] != ''){
-      return $this->_app['cookie_name_language'];
-    }
-    
-    return $this->_app['name']."_language_cookie";
-  }
-   
-   public function setServer($name,$value){
-     $_SERVER[$name] = $value;
-   }
  
    public function getPost($name = false) {
      if(is_array($_POST[$name])){
@@ -270,5 +217,4 @@ class AppRequest implements RequestInterface{
      return ('GET' == $this->getServer('REQUEST_METHOD'));
    }
  */
- 
 }

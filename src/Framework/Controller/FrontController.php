@@ -1,5 +1,5 @@
 <?php
-namespace Framework;
+namespace Framework\Controller;
 use Framework\Exception\ControllerNotFoundException;
 
 class FrontController{

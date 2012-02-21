@@ -14,9 +14,10 @@ apps:
     template_dir: %dir.root%/templates/backend/
     cookie:
       language: %app.name%-%apps.admin.name%-language
-    default_controller: index
-    default_aciton: index
-    default_language: nl
+    defaults:
+      controller: index
+      action: index
+      language: nl
     multi_language: true
     name_copy: @name
     dir: '%dir.root%admin/'
@@ -30,7 +31,9 @@ apps:
     name: frontend
     url: @www_url
     clean_url: true
-    default_controller: start
-    default_action: index
+    defaults:
+      controller: start
+      action: index
+      language: en
     
-  default: %admin%
+  default: admin
