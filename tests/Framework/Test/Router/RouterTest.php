@@ -33,9 +33,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     
     $Request = new \Framework\HTTP\Request(null,null,null,null, $Server);
     $AppRequest = new \Framework\HTTP\AppRequest($Request,$Config);
+    $AppRequest->initApp();
     
     $Router = new \Framework\Router\Router($AppRequest,null); // disable caching
     $Router->route();
+    //var_dump($Router);
         
   }
 }

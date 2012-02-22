@@ -1,4 +1,9 @@
 mapping:
+  reserved_words:
+    - language
+    - app
+    - controller
+    - action
   frontend:
     first_page:
       pattern: '/producten/{name}/{id}' 
