@@ -37,7 +37,34 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     
     $Router = new \Framework\Router\Router($AppRequest,null); // disable caching
     $Router->route();
-    //var_dump($Router);
+    $this->assertEquals($AppRequest->getController(),'product');
+    $this->assertEquals($AppRequest->getAction(),'category');
+    $this->assertEquals($AppRequest->name,'naam');
+    $this->assertEquals($AppRequest->id,'123');
         
+  }
+  
+  
+  /**
+    * @dataProvider setupConfig
+   */
+  public function testerRouteMatchingSimple(\Framework\Config\Config $Config)
+  {
+    
+    $Server = new \Framework\HTTP\Data\Server();
+    $Server->set('SERVER_NAME','www.test.be');
+    $Server->set('QUERY_STRING','/producten/product-naam/65465165165/');
+    
+    $Request = new \Framework\HTTP\Request(null,null,null,null, $Server);
+    $Route = new \Framework\Router\Route('first_page',$Config->get('mapping.frontend.first_page'), $Config->get('mapping.reserved_words'));
+    $AppRequest = new \Framework\HTTP\AppRequest($Request,$Config);
+    $AppRequest->initApp();
+    $Router = new \Framework\Router\Router($AppRequest,null); // disable caching
+    
+    $MatchingRoute = $Router->compareRouteRequest($Route,$Request);
+    $this->assertEquals($MatchingRoute->getController(),'product');
+    $this->assertEquals($MatchingRoute->getAction(),'category');
+    $this->assertEquals($AppRequest->name,'product-naam');
+    $this->assertEquals($AppRequest->id,'65465165165');
   }
 }

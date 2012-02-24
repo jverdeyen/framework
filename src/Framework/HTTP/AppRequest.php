@@ -133,6 +133,17 @@ class AppRequest implements RequestInterface{
   {
     return $this->Server();
   }
+  
+  public function getApp() { return $this->app; } 
+  public function getController() { return $this->controller; } 
+  public function getAction() { return $this->action; } 
+  public function getLanguage() { return $this->language; } 
+  public function setApp($x) { $this->app = $x; } 
+  public function setController($x) { $this->controller = $x; } 
+  public function setAction($x) { $this->action = $x; } 
+  public function setLanguage($x) { $this->language = $x; } 
+  
+  
   /*
   private function initExtraParams(){
     $params = $this->getParams();

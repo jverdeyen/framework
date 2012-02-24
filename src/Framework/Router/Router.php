@@ -43,15 +43,15 @@ class Router implements RouterInterface{
     }
 
     $Route = $this->findMatchingRoute($this->Routes, $this->AppRequest->Request);
-    /*
-    if($Mapping != false){
-      $this->MatchedMapping = $Mapping;
-      $this->Request->setController($Mapping->getController());
-      $this->Request->setAction($Mapping->getAction());
-      $this->Request->setApp($Mapping->getApp());
-      $this->Request->setExtraParams($this->Request);
+
+    if($Route != false){
+      //$this->MatchedMapping = $Mapping;
+      $this->AppRequest->setController($Route->getController());
+      $this->AppRequest->setAction($Route->getAction());
+      $this->AppRequest->setApp($Route->getApp());
+      //$this->AppRequest->setExtraParams($this->Request);
     }
-    */
+    
   }
   
   public function findAUrlMapping($uri){
@@ -74,7 +74,7 @@ class Router implements RouterInterface{
     
     $route_cache_key = 'RoutesMatch'.md5(implode('.',$uri).$this->AppRequest->app);
     
-    if($this->Caching != false){
+    if($this->Caching != null){
       if($Route = $this->Caching->getData($route_cache_key)){
         return $Mapping;
       }
@@ -82,8 +82,8 @@ class Router implements RouterInterface{
     
     
     foreach($this->Routes as $Route){
-      if($CheckedRoute = $this->checkRouteMatch(clone $Route, $Request)){
-        if($this->Caching != false){
+      if($CheckedRoute = $this->compareRouteRequest(clone $Route, $Request)){
+        if($this->Caching != null){
           $this->Caching->setData($route_cache_key,$Route);
         }
         return $CheckedRoute;
@@ -94,16 +94,20 @@ class Router implements RouterInterface{
 
   }
   
-  private function checkMatchFromUrl(\Framework\Router\Route $Route, \Framework\HTTP\RequestInterface $Request)
+  public function lookupRouterUrl(\Framework\Router\Route $Route, \Framework\HTTP\RequestInterface $Request)
   {
-    return false;
+    // TODO make this multi language work
+    $url_slugs = $Request->getParams();
     $index_start = 0;
+    $reserved_count = 2;
     $index = $index_start;
-    $total_extra =  count($url) <= 2 ? 0 : count($url)  - 2;
+    $total_extra =  count($url_slugs) <= $reserved_count ? 0 : count($url_slugs)  - $reserved_count;
     
-    
-    if($url[$index] != $Mapping->getController() && $Mapping->getController() != '*' )
+    var_dump($Route);
+    if($url_slugs[$index] != $Route->getController() && $Route->getController() != '*' ){
       return false;
+    }
+      
     $index++;
     
     if($Mapping->getAction() != '*'){
@@ -146,52 +150,63 @@ class Router implements RouterInterface{
 
       return false;         
     }
-    
+    return true;
     return str_replace($replace,$replace_by,$Mapping->getPattern());
   }
   
   /// checken of er nog parts in het patroon zitten (aantal moet kloppen)
-  private function checkRouteMatch($Mapping, $uri){
-    $parts = $Mapping->getPatternArray();
+  public function compareRouteRequest(\Framework\Router\Route $Route, \Framework\HTTP\RequestInterface $Request)
+  {
+    $route_slugs = $Route->getPatternArray();
+    $request_params = $Request->getParams();
+    $reserved_words = $this->Config->get('mapping.reserved_words');
     
-    if(count($parts) != count($uri))
+    if(count($parts) != count($request_uri)){
       return false;
+    }
+      
 
-    foreach($parts as $key => $slug){
-      // is dit een regex element? -> kijk dan na bij extra of het bestaat
+    foreach($route_slugs as $key => $slug)
+    {
       if(preg_match('/^{[a-zA-Z0-9_-]+}$/', $slug)){
-        // haal de reguliere expressie op voor dit specifiek item
-        $reserved_words = self::getReservedWords();
+        
         $slug_key = substr($slug, 1, -1);
-        $regex = $Mapping->getSlugMatch($slug_key);
+        $regex = $Route->getSlugMatch($slug_key);
 
-        // dit kan een reserved word zijn, kijk dan of de reguliere expressie hiermee klopt (of eender wat kan/mag zijn)
         if(in_array($slug_key,$reserved_words)){
           
-          if($slug_key == 'controller' && ($Mapping->getController() == '*' || preg_match($Mapping->getController(),$uri[$key])) ){
-            $Mapping->setController($uri[$key]);
+          if($slug_key == 'controller' && ($Route->getController() == '*' || preg_match($Route->getController(),$request_params[$key])) ){
+            $Route->setController($request_params[$key]);
             continue;
           }
           
-          if($slug_key == 'action' && ($Mapping->getAction() == '*' || preg_match($Mapping->getAction(),$uri[$key])) ){
-            $Mapping->setAction($uri[$key]);
+          if($slug_key == 'action' && ($Route->getAction() == '*' || preg_match($Route->getAction(),$request_params[$key])) ){
+            $Route->setAction($request_params[$key]);
             continue;
           }
               
         }
         
         // als het geen wildcard is en het match niet OF het is een reserved word -> geen match
-        if( in_array($slug_key,$reserved_words) || !( $regex == '*' || preg_match($regex,$uri[$key])))
+        if( in_array($slug_key,$reserved_words) || !( $regex == '*' || preg_match($regex,$request_params[$key]))){
           return false;
+        }
+        else{
+          $this->AppRequest->$slug_key = $request_params[$key];
+        }
           
-      }else{
+      }
+      else{
         // easy literal match
-        if(trim($slug) != trim($uri[$key]))
+        if(trim($slug) != trim($request_params[$key])){
           return false;
+        }
+          
       }
       
     }
-    return $Mapping;
+    
+    return $Route;
     
   }
     
