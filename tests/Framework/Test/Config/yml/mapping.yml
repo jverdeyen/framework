@@ -16,3 +16,12 @@ mapping:
             default: ''
           id: 
             match: '/^[0-9]+$/'
+    general_overview
+      pattern: '/{controller}/show/{id}'
+      controller: *
+      action: list
+      app: frontend
+      extra:
+        id:
+          match: '/^[0-9]+$/'
+          
