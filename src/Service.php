@@ -7,10 +7,12 @@ class Service{
   public $action;
   public $language;
   public $request;
+  public $Request; // for the love of god, I used the uppercase version 2
   protected $extra_params;
   
   public function __construct(){
     $this->request = Request::getInstance();
+    $this->Request = $this->request;
     $this->controller = $this->getRequest()->getController();
     $this->action = $this->getRequest()->getAction();
     $this->language = $this->getRequest()->getLanguage();
