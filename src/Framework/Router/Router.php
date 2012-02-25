@@ -34,7 +34,8 @@ class Router implements RouterInterface{
   /**
    * Converts the request object into a matching mapping
    */
-  public function route(){
+  public function route()
+  {
     //$this->AppRequest->initApp();
     $this->Routes = $this->getRoutes();
     
@@ -54,13 +55,21 @@ class Router implements RouterInterface{
     
   }
   
-  public function findAUrlMapping($uri){
-    $this->readRoutes();
-    foreach($this->Routes as $Mapping){
-      $result = $this->checkMatchFromUrl($Mapping,$uri);
+  public function getMatchingRouteForLink(\Framework\Router\Link $Link, $Routes = null)
+  {
+    if($Routes == null){
+      $Routes = $this->getRoutes();
+    }
+    
+
+    foreach($Routes as $Route)
+    {
+      $result = $this->getMatchFromLink($Link, $Route);
+      
       if($result != false){
         return $result;
-      }else{
+      }
+      else{
         continue;
       }
     }
@@ -72,7 +81,7 @@ class Router implements RouterInterface{
   public function findMatchingRoute($Routes, \Framework\HTTP\RequestInterface $Request)
   {
     
-    $route_cache_key = 'RoutesMatch'.md5(implode('.',$uri).$this->AppRequest->app);
+    $route_cache_key = 'RoutesMatch'.md5(implode('.',$Request->getParams()).$this->AppRequest->app);
     
     if($this->Caching != null){
       if($Route = $this->Caching->getData($route_cache_key)){
@@ -94,10 +103,10 @@ class Router implements RouterInterface{
 
   }
   
-  public function lookupRouterUrl(\Framework\Router\Route $Route, \Framework\HTTP\RequestInterface $Request)
+  public function getMatchFromLink(\Framework\Router\Link $Link, \Framework\Router\Route $Route)
   {
     // TODO make this multi language work
-    $url_slugs = $Request->getParams();
+    $url_slugs = $Link->getParams();
     $index_start = 0;
     $reserved_count = 2;
     $index = $index_start;
@@ -154,7 +163,6 @@ class Router implements RouterInterface{
     return str_replace($replace,$replace_by,$Mapping->getPattern());
   }
   
-  /// checken of er nog parts in het patroon zitten (aantal moet kloppen)
   public function compareRouteRequest(\Framework\Router\Route $Route, \Framework\HTTP\RequestInterface $Request)
   {
     $route_slugs = $Route->getPatternArray();
@@ -210,7 +218,7 @@ class Router implements RouterInterface{
     
   }
     
-  public function getRoutes($app = null)
+  public function getRoutes()
   {
     if($this->Caching != null){
       
