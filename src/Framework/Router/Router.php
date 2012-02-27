@@ -31,9 +31,7 @@ class Router implements RouterInterface{
     $this->Cache = $Cache;
   }
   
-  /**
-   * Converts the request object into a matching mapping
-   */
+
   public function route()
   {
     //$this->AppRequest->initApp();

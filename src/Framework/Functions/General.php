@@ -1,7 +1,8 @@
 <?php
-namespace Framework;
+namespace Framework\Functions;
 
-class GFunctions{
+class General
+{
     
   public static function checkZeroOneValue($value){
     return (in_array($value,array('0','1')) && is_numeric($value));
