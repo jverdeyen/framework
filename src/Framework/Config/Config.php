@@ -3,7 +3,7 @@ namespace Framework\Config;
 
 Class Config implements ConfigInterface{
   
-  public static $configuration = array();  
+  public $configuration = array();  
   public $Cache;
   
   public function __construct(ConfigReaderInterface $ConfigReader = null ,CacheInterface $Cache = null)
