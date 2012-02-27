@@ -3,7 +3,7 @@ namespace Framework\Config;
 
 Class ArrayConfigReader implements ConfigReaderInterface{
   
-  public static $config;
+  public $config;
     
   public function __construct($config){
     $this->config = $config;
