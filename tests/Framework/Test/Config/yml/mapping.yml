@@ -9,7 +9,7 @@ mapping:
       pattern: '/producten/{name}/{id}' 
       controller: product
       action: category
-      app: frontend
+      app: www
       extra:
           name:
             match: '*'
@@ -20,7 +20,7 @@ mapping:
       pattern: '/{controller}/show/{id}'
       controller: '*'
       action: list
-      app: frontend
+      app: admin
       extra:
           id:
             match: '/^[0-9]+$/'

@@ -6,6 +6,7 @@ class Route{
   public $pattern = '';
   public $controller = 'index';
   public $action = 'index';
+  public $language = '';
   public $app = '';
   public $extra = array();
   public $key = '';
@@ -29,6 +30,9 @@ class Route{
       $this->action = $data['action'];
     }
       
+    if($data['language'] != null){
+      $this->language = $data['language'];
+    }
     
     if($data['app'] != null){
       $this->app = $data['app'];
@@ -77,6 +81,7 @@ class Route{
     foreach($this->extra as $key => $value)
     {
       if(in_array($key,$reserved_words)){
+        //$this->extra[$key] = $this->$key;
         continue;
       }
         
@@ -158,6 +163,7 @@ class Route{
   public function getController(){ return $this->controller; }
   public function getAction(){ return $this->action; }
   public function getApp(){ return $this->app; }
+  public function getLanguage(){ return $this->language; }
   public function getExtra(){ return $this->extra; }
   public function getKey(){ return $this->key; }
   public function setController($x){ $this->controller = $x;}

@@ -1,7 +1,7 @@
 <?php
 namespace Framework\Router;
 
-class Router implements RouterInterface{
+class Router extends RouteReader implements RouterInterface {
   
   public $AppRequest = null;
   public $Config = null;
@@ -25,12 +25,6 @@ class Router implements RouterInterface{
     $this->AppRequest = $AppRequest;
     $this->Cache = $Cache;
   }
-  
-  public function setCache(\Framework\Cache\CacheInterface $Cache)
-  {
-    $this->Cache = $Cache;
-  }
-  
 
   public function route()
   {
@@ -52,30 +46,7 @@ class Router implements RouterInterface{
     }
     
   }
-  
-  public function getMatchingRouteForLink(\Framework\Router\Link $Link, $Routes = null)
-  {
-    if($Routes == null){
-      $Routes = $this->getRoutes();
-    }
     
-
-    foreach($Routes as $Route)
-    {
-      $result = $this->getMatchFromLink($Link, $Route);
-      
-      if($result != false){
-        return $result;
-      }
-      else{
-        continue;
-      }
-    }
-    
-    return false;
-
-  }
-  
   public function findMatchingRoute($Routes, \Framework\HTTP\RequestInterface $Request)
   {
     
@@ -99,66 +70,6 @@ class Router implements RouterInterface{
     }
     return false;
 
-  }
-  
-  public function getMatchFromLink(\Framework\Router\Link $Link, \Framework\Router\Route $Route)
-  {
-    // TODO make this multi language work
-    $url_slugs = $Link->getParams();
-    $index_start = 0;
-    $reserved_count = 2;
-    $index = $index_start;
-    $total_extra =  count($url_slugs) <= $reserved_count ? 0 : count($url_slugs)  - $reserved_count;
-    
-    var_dump($Route);
-    if($url_slugs[$index] != $Route->getController() && $Route->getController() != '*' ){
-      return false;
-    }
-      
-    $index++;
-    
-    if($Mapping->getAction() != '*'){
-      if($url[$index] != $Mapping->getAction() && $url[$index] != null)
-        return false;       
-      if($url[$index] == null && $Mapping->getAction() != 'index')
-        return false;
-    }
- 
-    $index += 2;
-    $extras = $Mapping->getExtra();
-    $extras_without_reserved_words = $extras;
-    
-    foreach($this->getReservedWords() as $word){
-      unset($extras_without_reserved_words[$word]);
-    }
-    $extra_count = count($extras_without_reserved_words);
-
-    if($extra_count != $total_extra)
-      return false;
-       
-    $replace = array();
-    $replace_by = array(); 
-    foreach($extras as $key => $value){  
-      $regex = $Mapping->getSlugMatch($key);
-     
-      if($regex == '*' || preg_match($regex,$url[$index])){
-        $replace[] = '{'.$key.'}';
-        
-        if($key == 'controller')
-          $replace_by[] = $url[$index_start];
-        elseif($key == 'action')
-          $replace_by[] = $url[$index_start+1];
-        else
-          $replace_by[] = $url[$index];
-          
-        $index++;
-        continue;
-      }
-
-      return false;         
-    }
-    return true;
-    return str_replace($replace,$replace_by,$Mapping->getPattern());
   }
   
   public function compareRouteRequest(\Framework\Router\Route $Route, \Framework\HTTP\RequestInterface $Request)
@@ -215,47 +126,6 @@ class Router implements RouterInterface{
     return $Route;
     
   }
-    
-  public function getRoutes()
-  {
-    if($this->Caching != null){
       
-      $cache_key = 'RoutesYaml'.$this->AppRequest->app;
-      
-      if(!($this->Routes = $this->Caching->getData($cache_key))){
-        $Routes = $this->getRoutesFromConfig();
-        $this->Caching->setData($cache_key,$Routes);
-        return $Routes;
-      }            
-    } 
-    else{
-      return $this->getRoutesFromConfig();      
-    }    
-  }
-  
-  public function getRoutesFromConfig(\Framework\Config\Config $Config = null)
-  {
-    if($Config == null){
-      $Config = $this->Config;
-    }
-      
-    $routesArray = $Config->get('mapping.'.$Config->get('apps.'.$this->AppRequest->app.'.name'));
-
-    if(!is_array($routesArray)){
-      return false;
-    }
-    
-    $Routes = array();
-    
-    foreach($routesArray as $key => $value){  
-      $Route = new Route($key,$value,$Config->get('mapping.reserved_words'));
-      $Routes[] = $Route;
-    }
-    
-    return $Routes;
-  }
-
-  
-  
 }
 ?>

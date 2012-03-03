@@ -27,6 +27,17 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     
     $url_simple_extra_cleanup_extreme = array('server' => 'www.test.be', 'controller' => 'test spatië', 'action' => 'lïst lîst', 'extra' => array('(1)','abc de fg'));
     $this->assertEquals($Link->getUrl($url_simple_extra_cleanup_extreme),'http://www.test.be/test-spatie/list-list/1/abc-de-fg');
-      
+    
+    $url_simple_default = array('server' => 'www.short.be', 'controller' => '', 'action' => '', 'language' => 'es');
+    $this->assertEquals($Link->getUrl($url_simple_default),'http://www.short.be/es');
+    
+    $url_simple_default = array('server' => 'www.short.be', 'controller' => '', 'action' => 'test', 'language' => 'es');
+    $this->assertEquals($Link->getUrl($url_simple_default),'http://www.short.be/es/index/test');
+    
+    $url_simple_default = array('server' => 'www.short.be', 'controller' => 'contr', 'action' => '', 'language' => 'es');
+    $this->assertEquals($Link->getUrl($url_simple_default),'http://www.short.be/es/contr');
+    
+    $url_simple_default = array('server' => 'www.short.be', 'controller' => '', 'action' => '', 'language' => 'es', 'extra' => array('muhaha'));
+    $this->assertEquals($Link->getUrl($url_simple_default),'http://www.short.be/es/index/index/muhaha');
   }
 }

@@ -13,20 +13,36 @@ class Link{
   
   public function __construct($array)
   {
-    $this->initData($data);
+    $this->initData($array);
   }
   
-  public function getUrl($data = false)
+  public function getUrl($data = false, $https = false)
   {
     if($data != false && is_array($data)){
       $this->initData($data);
     }
-
-    if($this->server == ''){
-      return false;
+    
+    $url = '';
+    $protocol = 'http';
+    
+    if($https === true){
+     $protocol = 'https';
     }
     
-    $url = 'http://'.$this->server;
+    if($this->server != ''){
+      $url = $protocol.'://'.$this->server;
+    }
+    
+    $parts = $this->getUrlParts($data); 
+    $parts = $this->getQueryString($parts);    
+    return $url.'/'.$parts;    
+  }
+  
+  public function getUrlParts($data = false){
+    if($data != false && is_array($data)){
+      $this->initData($data);
+    }
+    
     $parts = array();
     
     if($this->language != ''){
@@ -36,14 +52,14 @@ class Link{
     if($this->controller != ''){
       $parts[] = $this->controller;
     }
-    else{
+    elseif($this->action != '' || count($this->extra) > 0){
       $parts[] = 'index';
     }
     
     if($this->action != ''){
       $parts[] = $this->action;
     }
-    else{
+    elseif(count($this->extra) > 0){
       $parts[] = 'index';
     }
     
@@ -51,12 +67,11 @@ class Link{
       $parts = array_merge($parts,$this->extra);
     }
     
-    $parts = $this->getQueryString($parts);    
-    
-    return $url.'/'.$parts;    
+    return $parts;
   }
   
-  public function getQueryString($data = array()){
+  public function getQueryString($data = array())
+  {
     $data = implode('/',$data);    
     $data = strtolower($data);
     $data = str_replace(' ','-',$data); 
@@ -75,6 +90,11 @@ class Link{
     $this->server = $data['server'];
   }
   
+  public function getExtraByKey($key)
+  {
+    return $this->extra[$key];
+  }
+  
   public function getController(){ return $this->controller; }
   public function getAction(){ return $this->action; }
   public function getApp(){ return $this->app; }
@@ -83,5 +103,7 @@ class Link{
   public function setAction($x){ $this->action = $x;}
   public function setApp($x){ $this->app = $x;}
   public function setExtra($x){ $this->extra = $x;}
+  public function setLanguage($x){ $this->language = $x; }
+  public function setServer($x){ $this->server = $x; }
 }
 ?>

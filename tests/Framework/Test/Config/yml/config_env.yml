@@ -1,3 +1,4 @@
 environment: dev
 env: @environment
-admin_url: www.test.be
+admin_url: admin.test.be
+www_url: www2.test.be
