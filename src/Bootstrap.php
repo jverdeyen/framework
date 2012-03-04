@@ -73,7 +73,7 @@ class Bootstrap{
   }
   
   public static function runningInDev(){
-    return (ENVIRONMENT == 'dev');
+    return (ENVIRONMENT == 'dev' || ENVIRONMENT == 'test');
   }
 }
 ?>
