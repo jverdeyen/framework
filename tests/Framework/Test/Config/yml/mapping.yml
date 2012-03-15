@@ -24,4 +24,10 @@ mapping:
       extra:
           id:
             match: '/^[0-9]+$/'
+    start-page:
+      pattern: '/{language}/start'
+      controller: start
+      action: index
+      app: admin
+      extra:
           

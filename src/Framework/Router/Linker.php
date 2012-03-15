@@ -34,6 +34,7 @@ class Linker extends RouteReader
     if($Route !== false){
       $query_string = $this->getRouteQueryString($Link,$Route);
       $server = $this->Config->get('apps.'.$Route->getApp().'.url');
+      
       if($server == ''){
         $server = $this->Config->get('apps.'.$this->AppRequest->app.'.url');
       }
@@ -121,7 +122,15 @@ class Linker extends RouteReader
   {
     $url_pattern = $Link->getUrlParts();
     $route_pattern = $Route->getPatternArray();
-    $start_index = -1;
+    
+    // If the app has multi language support, and the first item in the url is a language item
+    if($this->Config->get('apps.'.$Route->getApp().'.multi_language') == true 
+                  && in_array($url_pattern[0],$this->Config->get('apps.'.$Route->getApp().'.languages'))){
+      $start_index = 0;
+    }
+    else{
+      $start_index = -1;
+    }
 
     foreach($route_pattern as $key => $value)
     {  
@@ -137,6 +146,11 @@ class Linker extends RouteReader
         }
         elseif($pattern_key == 'language'){
           $route_pattern[$key] = $url_pattern[$start_index];
+          
+          // If we need a language in our pattern, and none is given, take the apprequest language
+          if($route_pattern[$key] == ''){
+            $route_pattern[$key] = $this->AppRequest->getLanguage();
+          }
         }
         else{
          $route_pattern[$key] = $url_pattern[$pattern_key];

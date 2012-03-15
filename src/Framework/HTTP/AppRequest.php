@@ -41,7 +41,7 @@ class AppRequest implements RequestInterface{
   
   public function initLanguage()
   {
-    $this->languae = $this->findLanguage();
+    $this->language = $this->findLanguage();
   }
   
   public function findAppKey(Server $Server = null, \Framework\Config\ConfigInterface $Config = null)

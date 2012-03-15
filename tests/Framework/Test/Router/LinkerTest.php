@@ -24,7 +24,7 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     
     $Request = new \Framework\HTTP\Request(null,null,null,null, $Server);
     $AppRequest = new \Framework\HTTP\AppRequest($Request,$Config);
-    $AppRequest->initApp();
+    $AppRequest->initAll();
     
     return array(array($Config,$AppRequest));
   }
@@ -35,22 +35,11 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
   public function testcheckMatchRouteLink(\Framework\Config\Config $Config, \Framework\HTTP\AppRequest $AppRequest)
   {  
     $Linker = new \Framework\Router\Linker($AppRequest, $Config, null); // disable caching
-    
-    /*
-    general_overview:
-      pattern: '/{controller}/show/{id}'
-      controller: '*'
-      action: list
-      app: frontend
-      extra:
-          id:
-            match: '/^[0-9]+$/'
         
-    */
+    // /{controller}/show/{id}
     $Route = new \Framework\Router\Route('first_page',$Config->get('mapping.frontend.general_overview'), $Config->get('mapping.reserved_words'));
     $Link = new \Framework\Router\Link(array('controller' => 'eender', 'action' => 'list', 'extra' => array('id' => 1)));
     $this->assertTrue($Linker->checkMatchRouteLink($Link,$Route));
-    
     
     // /producten/{name}/{id}
     $Route = new \Framework\Router\Route('first_page',$Config->get('mapping.frontend.first_page'), $Config->get('mapping.reserved_words'));
@@ -64,7 +53,6 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     $Link = new \Framework\Router\Link(array('controller' => 'product', 'action' => 'category', 'extra' => array('title' => 'test', 'id' => 1)));
     $this->assertFalse($Linker->checkMatchRouteLink($Link,$Route));
     
-    
   }
   
   /**
@@ -75,9 +63,19 @@ class LinkerTest extends \PHPUnit_Framework_TestCase
     
     $Linker = new \Framework\Router\Linker($AppRequest,$Config,null); // disable caching
     // /producten/{name}/{id}
-    //$Route = new \Framework\Router\Route('first_page',$Config->get('mapping.frontend.first_page'), $Config->get('mapping.reserved_words'));
-    $Linker->getUrl(array('controller' => 'product', 'action' => 'category', 'extra' => array('id' => 2, 'name' => 'test')));
-     
-    $Linker->getUrl(array('controller' => 'random', 'action' => 'list', 'extra' => array('id' => 2)));
+   // $Route = new \Framework\Router\Route('first_page',$Config->get('mapping.frontend.first_page'), $Config->get('mapping.reserved_words'));
+    
+    $link = $Linker->getUrl(array('controller' => 'product', 'action' => 'category', 'extra' => array('id' => 2, 'name' => 'test','hello'=> 'world')));
+    $this->assertEquals('http://www.test.be/product/category/2/test/world',$link);
+    
+    $link = $Linker->getUrl(array('controller' => 'random', 'action' => 'list', 'extra' => array('id' => 2)));
+    $this->assertEquals('http://admin.test.be/random/show/2',$link);
+    
+    $link = $Linker->getUrl(array('controller' => 'start', 'action' => 'index', 'language' => 'nl'));
+    $this->assertEquals('http://admin.test.be/nl/start',$link);
+    
+    $link = $Linker->getUrl(array('controller' => 'start', 'action' => 'index'));
+    $this->assertEquals('http://admin.test.be/en/start',$link);
+    
   }
 }
