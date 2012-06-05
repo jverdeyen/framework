@@ -50,7 +50,7 @@ class Autoloader {
     $this->namespaces[strtoupper($namespace)] = $dir;
   }
   
-  private function autoload($class) {
+  public function autoload($class) {
     // Enkel registerd namespaces laden
     $temp = $class;
     $class = explode('\\',$class);    
