@@ -18,6 +18,7 @@ class Controller{
   public function __construct($options = array()){
     $this->options = $options;
     $this->Request = Request::getInstance();
+    $this->request = Request::getInstance();
     $this->response = Response::getInstance();
     $this->session = Session::getInstance();
     $this->action = $this->Request->getAction();
